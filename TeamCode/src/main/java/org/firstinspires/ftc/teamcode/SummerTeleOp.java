@@ -1,18 +1,9 @@
+
 package org.firstinspires.ftc.teamcode;
 
-import com.qualcomm.hardware.bosch.BNO055IMU;
-import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
-import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
-
-import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
-import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
-import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
-import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
-import org.firstinspires.ftc.robotcore.external.navigation.Position;
-import org.firstinspires.ftc.robotcore.external.navigation.Velocity;
 
 @TeleOp(name = "Summer", group = "Test")
 public class SummerTeleOp extends OpMode {
@@ -37,11 +28,11 @@ public class SummerTeleOp extends OpMode {
 
     @Override
     public void loop() {
-        robot.FrontLeft.setVelocity(2700 * (gamepad1.left_stick_y + gamepad1.left_stick_x));
-        robot.RearLeft.setVelocity(2700 * (gamepad1.left_stick_y - gamepad1.left_stick_x));
+        robot.FrontLeft.setVelocity(2600 * (gamepad1.left_stick_y + gamepad1.left_stick_x));
+        robot.RearLeft.setVelocity(2600 * (gamepad1.left_stick_y - gamepad1.left_stick_x));
 
-        robot.FrontRight.setVelocity(2700 * (-gamepad1.right_stick_y - gamepad1.right_stick_x));
-        robot.RearRight.setVelocity(2700 * (-gamepad1.right_stick_y + gamepad1.right_stick_x));
+        robot.FrontRight.setVelocity(2600 * (-gamepad1.right_stick_y - gamepad1.right_stick_x));
+        robot.RearRight.setVelocity(2600 * (-gamepad1.right_stick_y + gamepad1.right_stick_x));
         if (gamepad1.start && startCheck && start == 0) {
             robot.FrontRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
             robot.FrontLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
