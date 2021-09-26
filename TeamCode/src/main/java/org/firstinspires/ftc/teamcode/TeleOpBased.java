@@ -33,11 +33,11 @@ public class TeleOpBased extends OpMode {
     public void loop() {
         frontright = 2700 * (-gamepad1.right_stick_y - gamepad1.right_stick_x);
         frontright = frontright*frontright*Math.signum(frontright)/2700;
-        frontleft = 2700 * (gamepad1.left_stick_y + gamepad1.left_stick_x);
+        frontleft = 2700 * (gamepad1.left_stick_y - gamepad1.left_stick_x);
         frontleft = frontleft*frontleft*Math.signum(frontleft)/2700;
         rearright = 2700 * (-gamepad1.right_stick_y + gamepad1.right_stick_x);
         rearright = rearright*rearright*Math.signum(rearright)/2700;
-        rearleft = 2700 * (gamepad1.left_stick_y - gamepad1.left_stick_x);
+        rearleft = 2700 * (gamepad1.left_stick_y + gamepad1.left_stick_x);
         rearleft = rearleft*rearleft*Math.signum(rearleft)/2700;
 
         robot.FrontRight.setVelocity(frontright);

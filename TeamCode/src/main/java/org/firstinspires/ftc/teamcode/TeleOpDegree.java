@@ -28,15 +28,10 @@ public class TeleOpDegree extends OpMode {
 
     @Override
     public void loop() {
-        if(front) {
-
-            robot.FrontLeft.setVelocity(2700 * gamepad1.left_stick_y);
-            robot.RearRight.setVelocity(2700 * -gamepad1.right_stick_y);
-        }
-        else {
-            robot.FrontRight.setVelocity(2700 * -gamepad1.right_stick_y);
-            robot.RearLeft.setVelocity(2700 * gamepad1.left_stick_y);
-        }
+        robot.FrontRight.setVelocity(2700 * (-gamepad1.right_stick_y - gamepad1.right_stick_x));
+        robot.FrontLeft.setVelocity(2700 * (gamepad1.right_stick_y - gamepad1.right_stick_x));
+        robot.RearRight.setVelocity(2700 * (-gamepad1.right_stick_y + gamepad1.right_stick_x));
+        robot.RearLeft.setVelocity(2700 * (gamepad1.right_stick_y + gamepad1.right_stick_x));
 
         if (gamepad1.start && startCheck && start == 0) {
             robot.FrontRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);

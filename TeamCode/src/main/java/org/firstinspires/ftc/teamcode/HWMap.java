@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
@@ -12,6 +13,7 @@ public class HWMap {
     public DcMotorEx RearLeft  = null;
     public DcMotorEx RearRight  = null;
 
+    public BNO055IMU imu = null;
     /* local OpMode members. */
     HardwareMap hwMap           =  null;
 
@@ -27,5 +29,7 @@ public class HWMap {
         FrontRight  = (DcMotorEx) hwMap.dcMotor.get("frontRight");
         RearLeft = (DcMotorEx) hwMap.dcMotor.get("rearLeft");
         RearRight = (DcMotorEx) hwMap.dcMotor.get("rearRight");
+
+        imu = hwMap.get(BNO055IMU.class, "imu");
     }
 }
