@@ -50,7 +50,16 @@ public class TeleOpPOV extends OpMode {
     @Override
     public void loop() {
         checkOrientation();
-        if(start == 0) {
+        telemetry.addLine("currentHeading: "+currentHeading);
+
+        robot.FrontRight.setVelocity(2700 * ((-gamepad1.right_stick_y) * convert(currentHeading, 1)));
+        robot.FrontLeft.setVelocity(2700 * ((gamepad1.right_stick_y) * convert(currentHeading, 2)));
+        robot.RearRight.setVelocity(2700 * ((-gamepad1.right_stick_y) * convert(currentHeading, 3)));
+        robot.RearLeft.setVelocity(2700 * ((gamepad1.right_stick_y) * convert(currentHeading, 4)));
+
+        telemetry.update();
+
+        /*if(start == 0) {
             robot.FrontRight.setVelocity(2700 * ((-gamepad1.right_stick_y - gamepad1.right_stick_x) * convert(currentHeading, 1)));
             robot.FrontLeft.setVelocity(2700 * ((gamepad1.right_stick_y + gamepad1.right_stick_x) * convert(currentHeading, 2)));
             robot.RearRight.setVelocity(2700 * ((-gamepad1.right_stick_y + gamepad1.right_stick_x) * convert(currentHeading, 3)));
@@ -88,7 +97,7 @@ public class TeleOpPOV extends OpMode {
             startCheck = false;
         } else if (!gamepad1.start) {
             startCheck = true;
-        }
+        }*/
     }
 
     private float convert (float deg, int wheel) {
@@ -101,6 +110,9 @@ public class TeleOpPOV extends OpMode {
         else {
             powerb = power(deg - 45, wheel);
         }
+        telemetry.addLine("Wheel "+wheel+" powera: "+powera);
+        telemetry.addLine("Wheel "+wheel+" powerb: "+powerb);
+        telemetry.addLine("Wheel "+wheel+" Final power: "+(((1 - ((deg/90)%1))*powera) + (((deg/90)%1)*powerb)));
         //float degrees3 = (((1 - ((deg/45)%1))*powera) + (((deg/45)%1)*powerb))/2;
         return (((1 - ((deg/90)%1))*powera) + (((deg/90)%1)*powerb)); //turns power of top and bottom into the in between
     }
