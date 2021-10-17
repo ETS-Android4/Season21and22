@@ -1,16 +1,19 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.andy;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
-@TeleOp(name = "TeleOpDegree", group = "Test")
-public class TeleOpDegree extends OpMode {
+import org.firstinspires.ftc.teamcode.andy.HWMapAndy;
 
-    HWMap robot = new HWMap();
+import java.lang.*;
+
+@TeleOp(name = "AndyBot", group = "Test")
+public class AndyBot extends OpMode {
+
+    HWMapAndy robot = new HWMapAndy();
     boolean startCheck = true;
     int start = 0;
-    boolean front = true;
 
     @Override
     public void init() {
@@ -28,10 +31,20 @@ public class TeleOpDegree extends OpMode {
 
     @Override
     public void loop() {
-        robot.FrontRight.setVelocity(2700 * (-gamepad1.right_stick_y - gamepad1.right_stick_x));
-        robot.FrontLeft.setVelocity(2700 * (-gamepad1.right_stick_y - gamepad1.right_stick_x));
+        robot.FrontRight.setVelocity(-2700 * (-gamepad1.right_stick_y - gamepad1.right_stick_x));
+        robot.FrontLeft.setVelocity(-2700 * (gamepad1.left_stick_y - gamepad1.left_stick_x));
         robot.RearRight.setVelocity(2700 * (-gamepad1.right_stick_y + gamepad1.right_stick_x));
-        robot.RearLeft.setVelocity(2700 * (-gamepad1.right_stick_y + gamepad1.right_stick_x));
+        robot.RearLeft.setVelocity(-2700 * (gamepad1.left_stick_y + gamepad1.left_stick_x));
+
+        if(gamepad1.right_bumper){
+            robot.Scoop.setVelocity(2700);
+        }
+        else if(gamepad1.left_bumper){
+            robot.Scoop.setVelocity(-2700);
+        }
+        else {
+            robot.Scoop.setVelocity(0);
+        }
 
         if (gamepad1.start && startCheck && start == 0) {
             robot.FrontRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -49,13 +62,6 @@ public class TeleOpDegree extends OpMode {
             startCheck = false;
         } else if (!gamepad1.start) {
             startCheck = true;
-        }
-
-        if(gamepad1.a){
-            front = false;
-        }
-        else if(gamepad1.b){
-            front = true;
         }
     }
 }

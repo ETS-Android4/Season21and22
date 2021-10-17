@@ -52,10 +52,15 @@ public class TeleOpPOV extends OpMode {
         checkOrientation();
         telemetry.addLine("currentHeading: "+currentHeading);
 
-        robot.FrontRight.setVelocity(2700 * ((-gamepad1.right_stick_y) * convert(currentHeading, 1)));
-        robot.FrontLeft.setVelocity(2700 * ((gamepad1.right_stick_y) * convert(currentHeading, 2)));
-        robot.RearRight.setVelocity(2700 * ((-gamepad1.right_stick_y) * convert(currentHeading, 3)));
-        robot.RearLeft.setVelocity(2700 * ((gamepad1.right_stick_y) * convert(currentHeading, 4)));
+        //robot.FrontRight.setVelocity(2700 * ((-gamepad1.right_stick_y) * convert(currentHeading, 1)));
+        //robot.FrontLeft.setVelocity(2700 * ((gamepad1.right_stick_y) * convert(currentHeading, 2)));
+        //robot.RearRight.setVelocity(2700 * ((-gamepad1.right_stick_y) * convert(currentHeading, 3)));
+        //robot.RearLeft.setVelocity(2700 * ((gamepad1.right_stick_y) * convert(currentHeading, 4)));
+
+        robot.FrontRight.setPower(-gamepad1.right_stick_y * convert(currentHeading, 1));
+        robot.FrontLeft.setPower(gamepad1.right_stick_y * convert(currentHeading, 2));
+        robot.RearRight.setPower(-gamepad1.right_stick_y * convert(currentHeading, 3));
+        robot.RearLeft.setPower(gamepad1.right_stick_y * convert(currentHeading, 4));
 
         telemetry.update();
 
