@@ -110,34 +110,40 @@ public class TeleOpPOV extends OpMode {
         float powera = power(deg, wheel);
         float powerb = 0;
         if(deg == Math.abs(deg)) {
-            powerb = power(deg + 45, wheel);
+            powerb = power(deg + 22.5f, wheel);
         }
         else {
-            powerb = power(deg - 45, wheel);
+            powerb = power(deg - 22.5f, wheel);
         }
         telemetry.addLine("Wheel "+wheel+" powera: "+powera);
         telemetry.addLine("Wheel "+wheel+" powerb: "+powerb);
-        telemetry.addLine("Wheel "+wheel+" Final power: "+(((1 - ((deg/90)%1))*powera) + (((deg/90)%1)*powerb)));
+        telemetry.addLine("Wheel "+wheel+" Final power: "+(((1 - ((deg/45)%1))*powera) + (((deg/45)%1)*powerb)));
         //float degrees3 = (((1 - ((deg/45)%1))*powera) + (((deg/45)%1)*powerb))/2;
-        return (((1 - ((deg/90)%1))*powera) + (((deg/90)%1)*powerb)); //turns power of top and bottom into the in between
+        return (((1 - ((deg/45)%1))*powera) + (((deg/45)%1)*powerb)); //turns power of top and bottom into the in between
     }
 
     private int power (float deg, int wheel){
-        int degree = (int)(deg/90);
-        if (wheel == 1 || wheel == 3) {   //frontRight and rearLeft
-            if(degree <= -1 || degree == 2) {
+        int degree = (int)(deg/45);
+        if (wheel == 2 || wheel == 3) {   //frontLeft and rearRight
+            if(degree <= -2 || degree == 4) {
                 return -1;
             }
-            else if (deg == Math.abs(deg) && (degree == 0 || deg == 1)){
+            else if (deg == Math.abs(deg) && (degree <= 2)){
                 return 1;
+            }
+            else if (degree == 3 || degree == -1){
+                return 0;
             }
         }
-        else if (wheel == 2 || wheel == 4) {   //frontLeft and rearRight
-            if(degree >= 1 || degree == -2) {
+        else if (wheel == 1 || wheel == 4) {   //frontRight and rearLeft
+            if(degree == -4 || degree >= 2) {
                 return -1;
             }
-            else if ((deg != Math.abs(deg) || deg==0) && (degree == 0 || deg == -1)){
+            else if ((deg != Math.abs(deg) || deg==0) && (degree >= -2)){
                 return 1;
+            }
+            else if (degree == -3 || degree == 1){
+                return 0;
             }
         }
         //degrees/90 = 0 | -90 : 90
