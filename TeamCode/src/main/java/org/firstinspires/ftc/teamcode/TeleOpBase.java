@@ -26,8 +26,12 @@ public class TeleOpBase extends OpMode {
         robot.FrontLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         robot.RearRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         robot.RearLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        robot.spin.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        robot.Dump.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        robot.spin.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.Dump.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.spin.setTargetPosition(0);
+        robot.Dump.setTargetPosition(0);
+        robot.spin.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        robot.Dump.setMode(DcMotor.RunMode.RUN_TO_POSITION);
     }
 
     @Override
@@ -37,7 +41,7 @@ public class TeleOpBase extends OpMode {
         robot.RearRight.setVelocity(2700 * (-gamepad1.right_stick_y + gamepad1.right_stick_x));
         robot.RearLeft.setVelocity(2700 * (gamepad1.left_stick_y + gamepad1.left_stick_x));
 
-        if(gamepad1.a) {
+        /*if(gamepad1.a) {
             robot.spin.setVelocity(2700);
         }else if(gamepad1.b){
             robot.Dump.setVelocity(2700);
@@ -48,6 +52,26 @@ public class TeleOpBase extends OpMode {
         }else{
             robot.spin.setVelocity(0);
             robot.Dump.setVelocity(0);
+        }*/
+
+        if(gamepad1.a){
+            spin(0);
+        }
+        if(gamepad1.b){
+            spin(-500);
+        }
+        if(gamepad1.x) {
+            spin(-1000);
+        }
+
+        if(gamepad1.dpad_left){
+            dump(0);
+        }
+        if(gamepad1.dpad_up){
+            dump(-300);
+        }
+        if(gamepad1.dpad_right) {
+            dump(500);
         }
 
         if (gamepad1.start && startCheck && start == 0) {
@@ -67,5 +91,21 @@ public class TeleOpBase extends OpMode {
         } else if (!gamepad1.start) {
             startCheck = true;
         }
+    }
+
+    private void spin(int position) {
+        robot.spin.setTargetPosition(position);
+
+        robot.spin.setPower(1);
+        while (robot.spin.isBusy()){}
+        robot.spin.setPower(0);
+    }
+
+    private void dump(int position) {
+        robot.Dump.setTargetPosition(position);
+
+        robot.Dump.setPower(1);
+        while (robot.Dump.isBusy()){}
+        robot.Dump.setPower(0);
     }
 }
