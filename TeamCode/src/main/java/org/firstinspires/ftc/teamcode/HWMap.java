@@ -13,7 +13,8 @@ public class HWMap {
     public DcMotorEx RearLeft  = null;
     public DcMotorEx RearRight  = null;
     public DcMotorEx Dump = null;
-    public DcMotorEx spin = null;
+    public DcMotorEx Spin = null;
+    public DcMotorEx Collect = null;
 
     public BNO055IMU imu = null;
     /* local OpMode members. */
@@ -32,7 +33,8 @@ public class HWMap {
         RearLeft = (DcMotorEx) hwMap.dcMotor.get("rearLeft");
         RearRight = (DcMotorEx) hwMap.dcMotor.get("rearRight");
         Dump = (DcMotorEx) hwMap.dcMotor.get("dump");
-        spin = (DcMotorEx)hwMap.dcMotor.get("spin");
+        Spin = (DcMotorEx)hwMap.dcMotor.get("spin");
+        Collect = (DcMotorEx)hwMap.dcMotor.get("collect");
         imu = hwMap.get(BNO055IMU.class, "imu");
     }
 }
