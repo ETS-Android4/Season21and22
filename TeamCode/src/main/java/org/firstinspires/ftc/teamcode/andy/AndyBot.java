@@ -23,27 +23,29 @@ public class AndyBot extends OpMode {
         robot.RearRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
         robot.RearLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
 
-        robot.FrontRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        robot.FrontLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        robot.RearRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        robot.RearLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        /*
+        robot.FrontRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        robot.FrontLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        robot.RearRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        robot.RearLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);*/
     }
 
     @Override
     public void loop() {
-        robot.FrontRight.setVelocity(-2700 * (-gamepad1.right_stick_y - gamepad1.right_stick_x));
-        robot.FrontLeft.setVelocity(-2700 * (gamepad1.left_stick_y - gamepad1.left_stick_x));
-        robot.RearRight.setVelocity(2700 * (-gamepad1.right_stick_y + gamepad1.right_stick_x));
-        robot.RearLeft.setVelocity(-2700 * (gamepad1.left_stick_y + gamepad1.left_stick_x));
+        /*robot.FrontRight.setVelocity(-2700 * (-gamepad1.right_stick_y - gamepad1.right_stick_x));
+        robot.FrontLeft.setVelocity(2700 * (gamepad1.left_stick_y - gamepad1.left_stick_x));
+        robot.RearRight.setVelocity(-2700 * (-gamepad1.right_stick_y + gamepad1.right_stick_x));
+        robot.RearLeft.setVelocity(2700 * (gamepad1.left_stick_y + gamepad1.left_stick_x));*/
+        robot.FrontRight.setPower(-gamepad1.right_stick_y - gamepad1.right_stick_x);
+        robot.FrontLeft.setPower(gamepad1.left_stick_y - gamepad1.left_stick_x);
+        robot.RearRight.setPower(-(-gamepad1.right_stick_y + gamepad1.right_stick_x));
+        robot.RearLeft.setPower(gamepad1.left_stick_y + gamepad1.left_stick_x);
 
-        if(gamepad1.right_bumper){
-            robot.Scoop.setVelocity(2700);
-        }
-        else if(gamepad1.left_bumper){
-            robot.Scoop.setVelocity(-2700);
+        if(gamepad1.right_trigger > 0) {
+            robot.Rubber.setPower(gamepad1.right_trigger);
         }
         else {
-            robot.Scoop.setVelocity(0);
+            robot.Rubber.setPower(-gamepad1.left_trigger);
         }
 
         if (gamepad1.start && startCheck && start == 0) {

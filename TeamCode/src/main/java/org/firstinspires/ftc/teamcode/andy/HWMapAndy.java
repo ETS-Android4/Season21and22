@@ -12,7 +12,7 @@ public class HWMapAndy {
     public DcMotorEx FrontRight  = null;
     public DcMotorEx RearLeft  = null;
     public DcMotorEx RearRight  = null;
-    public DcMotorEx Scoop  = null;
+    public DcMotorEx Rubber = null;
 
     public BNO055IMU imu = null;
     /* local OpMode members. */
@@ -30,7 +30,7 @@ public class HWMapAndy {
         FrontRight  = (DcMotorEx) hwMap.dcMotor.get("frontRight");
         RearLeft = (DcMotorEx) hwMap.dcMotor.get("rearLeft");
         RearRight = (DcMotorEx) hwMap.dcMotor.get("rearRight");
-        Scoop = (DcMotorEx) hwMap.dcMotor.get("scoop");
+        Rubber = (DcMotorEx) hwMap.dcMotor.get("rubber");
 
         imu = hwMap.get(BNO055IMU.class, "imu");
     }

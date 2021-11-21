@@ -15,6 +15,7 @@ public class HWMap {
     public DcMotorEx Dump = null;
     public DcMotorEx Spin = null;
     public DcMotorEx Collect = null;
+    public DcMotorEx Rubber = null;
 
     public BNO055IMU imu = null;
     /* local OpMode members. */
@@ -35,6 +36,8 @@ public class HWMap {
         Dump = (DcMotorEx) hwMap.dcMotor.get("dump");
         Spin = (DcMotorEx)hwMap.dcMotor.get("spin");
         Collect = (DcMotorEx)hwMap.dcMotor.get("collect");
+        Rubber = (DcMotorEx)hwMap.dcMotor.get("rubber");
+
         imu = hwMap.get(BNO055IMU.class, "imu");
     }
 }
