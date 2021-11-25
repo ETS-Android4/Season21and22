@@ -1,10 +1,11 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.old;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
-@TeleOp(name = "TeleOpCar", group = "Test")
+import org.firstinspires.ftc.teamcode.HWMap;
+
 public class TeleOpCAR extends OpMode {
 
     HWMap robot = new HWMap();
