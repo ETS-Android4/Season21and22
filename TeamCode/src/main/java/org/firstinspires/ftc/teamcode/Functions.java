@@ -8,44 +8,51 @@ public class Functions {
     private int zero = 0;
     public float speedMod = 1f;
     public float frontright, frontleft, rearright, rearleft = 0f;
+    public DcMotorEx FrontRight = robot.FrontRight;
+    public DcMotorEx FrontLeft = robot.FrontLeft;
+    public DcMotorEx RearRight = robot.RearRight;
+    public DcMotorEx RearLeft = robot.RearLeft;
+    public DcMotorEx Spin = robot.Spin;
+    public DcMotorEx Dump = robot.Dump;
+    public DcMotorEx Collect = robot.Collect;
 
     public void setMode(DcMotor.RunMode mode){
-        robot.FrontRight.setMode(mode);
-        robot.FrontLeft.setMode(mode);
-        robot.RearRight.setMode(mode);
-        robot.RearLeft.setMode(mode);
+        FrontRight.setMode(mode);
+        FrontLeft.setMode(mode);
+        RearRight.setMode(mode);
+        RearLeft.setMode(mode);
     }
 
     public void changeZero(){
         if(zero % 2 == 0) {
-            robot.FrontRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
-            robot.FrontLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
-            robot.RearRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
-            robot.RearLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+            FrontRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+            FrontLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+            RearRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+            RearLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
         }
         else {
-            robot.FrontRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-            robot.FrontLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-            robot.RearRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-            robot.RearLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+            FrontRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+            FrontLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+            RearRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+            RearLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         }
         zero++;
     }
 
     public void spinPos(int position) {
-        robot.Spin.setTargetPosition(position);
+        Spin.setTargetPosition(position);
 
-        robot.Spin.setPower(1);
-        while (robot.Spin.isBusy()){}
-        robot.Spin.setPower(0);
+        Spin.setPower(1);
+        while (Spin.isBusy()){}
+        Spin.setPower(0);
     }
 
     public void dumpPos(int position) {
-        robot.Dump.setTargetPosition(position);
+        Dump.setTargetPosition(position);
 
-        robot.Dump.setPower(1);
-        while (robot.Dump.isBusy()){}
-        robot.Dump.setPower(0);
+        Dump.setPower(1);
+        while (Dump.isBusy()){}
+        Dump.setPower(0);
     }
 
     public void runToPosition(DcMotorEx motor){
@@ -55,10 +62,10 @@ public class Functions {
     }
 
     public void setVelocityExp(){
-        robot.FrontRight.setVelocity(speedMod*((frontright*frontright*Math.signum(frontright))/2700));
-        robot.FrontLeft.setVelocity(speedMod*((frontleft*frontleft*Math.signum(frontleft))/2700));
-        robot.RearRight.setVelocity(speedMod*((rearright*rearright*Math.signum(rearright))/2700));
-        robot.RearLeft.setVelocity(speedMod*((rearleft*rearleft*Math.signum(rearleft))/2700));
+        FrontRight.setVelocity(speedMod*((frontright*frontright*Math.signum(frontright))/2700));
+        FrontLeft.setVelocity(speedMod*((frontleft*frontleft*Math.signum(frontleft))/2700));
+        RearRight.setVelocity(speedMod*((rearright*rearright*Math.signum(rearright))/2700));
+        RearLeft.setVelocity(speedMod*((rearleft*rearleft*Math.signum(rearleft))/2700));
     }
 
     public void altSpeed(){

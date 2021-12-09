@@ -9,6 +9,7 @@ import org.firstinspires.ftc.teamcode.HWMap;
 
 import java.lang.*;
 
+@TeleOp(name = "TeleOpBase", group = "Test")
 public class TeleOpBase extends OpMode {
 
     HWMap robot = new HWMap();
@@ -24,16 +25,16 @@ public class TeleOpBase extends OpMode {
     public void init() {
         robot.init(hardwareMap);
         fun.changeZero();
-        robot.Spin.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        robot.Dump.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        fun.Spin.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        fun.Dump.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         fun.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        robot.Spin.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.Dump.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.Spin.setTargetPosition(0);
-        robot.Dump.setTargetPosition(0);
-        robot.Spin.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        robot.Dump.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        fun.Spin.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        fun.Dump.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        fun.Spin.setTargetPosition(0);
+        fun.Dump.setTargetPosition(0);
+        fun.Spin.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        fun.Dump.setMode(DcMotor.RunMode.RUN_TO_POSITION);
     }
 
     @Override
@@ -43,10 +44,10 @@ public class TeleOpBase extends OpMode {
         rearright = 2700 * (-gamepad1.right_stick_y + gamepad1.right_stick_x);
         rearleft = 2700 * (gamepad1.left_stick_y + gamepad1.left_stick_x);
 
-        robot.FrontRight.setVelocity((frontright*frontright*Math.signum(frontright))/2700);
-        robot.FrontLeft.setVelocity((frontleft*frontleft*Math.signum(frontleft))/2700);
-        robot.RearRight.setVelocity((rearright*rearright*Math.signum(rearright))/2700);
-        robot.RearLeft.setVelocity((rearleft*rearleft*Math.signum(rearleft))/2700);
+        fun.FrontRight.setVelocity((frontright*frontright*Math.signum(frontright))/2700);
+        fun.FrontLeft.setVelocity((frontleft*frontleft*Math.signum(frontleft))/2700);
+        fun.RearRight.setVelocity((rearright*rearright*Math.signum(rearright))/2700);
+        fun.RearLeft.setVelocity((rearleft*rearleft*Math.signum(rearleft))/2700);
 
         if(gamepad1.a){
             fun.spinPos(0);
@@ -69,21 +70,21 @@ public class TeleOpBase extends OpMode {
         }
 
         if(gamepad1.right_trigger > 0) {
-            robot.Collect.setPower(gamepad1.right_trigger);
+            fun.Collect.setPower(gamepad1.right_trigger);
         }
         else {
-            robot.Collect.setPower(-gamepad1.left_trigger);
+            fun.Collect.setPower(-gamepad1.left_trigger);
         }
 
-        if(gamepad1.right_bumper){
-            robot.Rubber.setPower(1);
+        /*if(gamepad1.right_bumper){
+            fun.Rubber.setPower(1);
         }
         else if(gamepad1.left_bumper){
-            robot.Rubber.setPower(-1);
+            fun.Rubber.setPower(-1);
         }
         else {
-            robot.Rubber.setPower(0);
-        }
+            fun.Rubber.setPower(0);
+        }*/
 
         if (gamepad1.start && startCheck) {
             fun.changeZero();

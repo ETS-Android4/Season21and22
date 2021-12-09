@@ -69,7 +69,7 @@ public class TeleOpOmni extends OpMode {
             robot.Collect.setPower(-gamepad1.left_trigger);
         }
 
-        if(gamepad1.right_bumper){
+        /*if(gamepad1.right_bumper){
             robot.Rubber.setPower(1);
         }
         else if(gamepad1.left_bumper){
@@ -77,7 +77,7 @@ public class TeleOpOmni extends OpMode {
         }
         else {
             robot.Rubber.setPower(0);
-        }
+        }*/
 
         if (gamepad1.start && startCheck) {
             fun.changeZero();
