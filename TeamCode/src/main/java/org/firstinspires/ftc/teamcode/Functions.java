@@ -1,20 +1,34 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.HardwareMap;
 
 public class Functions {
-    HWMap robot = new HWMap();
     private int zero = 0;
     public float speedMod = 1f;
     public float frontright, frontleft, rearright, rearleft = 0f;
-    public DcMotorEx FrontRight = robot.FrontRight;
-    public DcMotorEx FrontLeft = robot.FrontLeft;
-    public DcMotorEx RearRight = robot.RearRight;
-    public DcMotorEx RearLeft = robot.RearLeft;
-    public DcMotorEx Spin = robot.Spin;
-    public DcMotorEx Dump = robot.Dump;
-    public DcMotorEx Collect = robot.Collect;
+    private DcMotorEx FrontLeft = null;
+    private DcMotorEx FrontRight  = null;
+    private DcMotorEx RearLeft  = null;
+    private DcMotorEx RearRight  = null;
+    private DcMotorEx Dump = null;
+    private DcMotorEx Spin = null;
+    private DcMotorEx Collect = null;
+    //private DcMotorEx Rubber = null;
+    private BNO055IMU imu = null;
+
+    public Functions (DcMotorEx fl, DcMotorEx fr, DcMotorEx rl, DcMotorEx rr, DcMotorEx d, DcMotorEx s, DcMotorEx c, BNO055IMU i) {
+        FrontLeft = fl;
+        FrontRight = fr;
+        RearLeft = rl;
+        RearRight = rr;
+        Dump = d;
+        Spin = s;
+        Collect = c;
+        imu = i;
+    }
 
     public void setMode(DcMotor.RunMode mode){
         FrontRight.setMode(mode);

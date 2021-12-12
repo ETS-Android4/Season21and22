@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 @TeleOp(name = "TeleOpOmni", group = "Final")
 public class TeleOpOmni extends OpMode {
     HWMap robot = new HWMap();
-    Functions fun = new Functions();
+    Functions fun = new Functions(robot.FrontLeft, robot.FrontRight, robot.RearLeft, robot.RearRight, robot.Dump, robot.Spin, robot.Collect, robot.imu);
 
     boolean startCheck = true;
     boolean xCheck = true;
