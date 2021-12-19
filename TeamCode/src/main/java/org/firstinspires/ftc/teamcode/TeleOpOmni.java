@@ -6,8 +6,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 
 @TeleOp(name = "TeleOpOmni", group = "Final")
 public class TeleOpOmni extends OpMode {
-    HWMap robot = new HWMap();
-    Functions fun = new Functions(robot.FrontLeft, robot.FrontRight, robot.RearLeft, robot.RearRight, robot.Dump, robot.Spin, robot.Collect, robot.imu);
+    Functions fun = new Functions();
 
     boolean startCheck = true;
     boolean xCheck = true;
@@ -15,15 +14,19 @@ public class TeleOpOmni extends OpMode {
     int driveMode = 0;
 
     float r, l, r2, l2, right, left, speed, turn = 0f;
+
+    @Override
     public void init(){
-        robot.init(hardwareMap);
+        fun.init(hardwareMap);
         fun.changeZero();
-        robot.Spin.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        robot.Dump.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        fun.runToPosition(robot.Spin);
-        fun.runToPosition(robot.Dump);
+        fun.Spin.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        fun.Dump.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        fun.runToPosition(fun.Spin);
+        fun.runToPosition(fun.Dump);
         fun.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
+
+    @Override
     public void loop(){
         if(gamepad1.x && xCheck){
             driveMode++;
@@ -63,21 +66,21 @@ public class TeleOpOmni extends OpMode {
         }
 
         if(gamepad1.right_trigger > 0) {
-            robot.Collect.setPower(gamepad1.right_trigger);
+            fun.Collect.setPower(gamepad1.right_trigger);
         }
         else {
-            robot.Collect.setPower(-gamepad1.left_trigger);
+            fun.Collect.setPower(-gamepad1.left_trigger);
         }
 
-        /*if(gamepad1.right_bumper){
-            robot.Rubber.setPower(1);
+        if(gamepad1.right_bumper){
+            fun.Rubber.setPower(1);
         }
         else if(gamepad1.left_bumper){
-            robot.Rubber.setPower(-1);
+            fun.Rubber.setPower(-1);
         }
         else {
-            robot.Rubber.setPower(0);
-        }*/
+            fun.Rubber.setPower(0);
+        }
 
         if (gamepad1.start && startCheck) {
             fun.changeZero();
@@ -120,10 +123,10 @@ public class TeleOpOmni extends OpMode {
                 left = ((1 - Math.abs(turn)) * speed + (1 - Math.abs(speed)) * turn + turn + speed) / 2;
                 right = ((1 - Math.abs(turn)) * speed - (1 - Math.abs(speed)) * turn - turn + speed) / 2;
 
-                robot.FrontRight.setVelocity(fun.speedMod * 2700 * right);
-                robot.FrontLeft.setVelocity(fun.speedMod * 2700 * left);
-                robot.RearRight.setVelocity(fun.speedMod * 2700 * right);
-                robot.RearLeft.setVelocity(fun.speedMod * 2700 * left);
+                fun.FrontRight.setVelocity(fun.speedMod * 2700 * right);
+                fun.FrontLeft.setVelocity(fun.speedMod * 2700 * left);
+                fun.RearRight.setVelocity(fun.speedMod * 2700 * right);
+                fun.RearLeft.setVelocity(fun.speedMod * 2700 * left);
                 break;
         }
     }
