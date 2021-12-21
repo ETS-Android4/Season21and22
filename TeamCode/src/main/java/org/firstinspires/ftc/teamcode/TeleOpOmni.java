@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import org.firstinspires.ftc.teamcode.Functions;
 
 @TeleOp(name = "TeleOpOmni", group = "Final")
 public class TeleOpOmni extends OpMode {
@@ -18,12 +19,6 @@ public class TeleOpOmni extends OpMode {
     @Override
     public void init(){
         fun.init(hardwareMap);
-        fun.changeZero();
-        fun.Spin.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        fun.Dump.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        fun.runToPosition(fun.Spin);
-        fun.runToPosition(fun.Dump);
-        fun.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
 
     @Override

@@ -77,7 +77,7 @@ public class TeleOpBase extends OpMode {
             robot.Collect.setPower(-gamepad1.left_trigger);
         }
 
-        /*if(gamepad1.right_bumper){
+        if(gamepad1.right_bumper){
             robot.Rubber.setPower(1);
         }
         else if(gamepad1.left_bumper){
@@ -85,7 +85,7 @@ public class TeleOpBase extends OpMode {
         }
         else {
             robot.Rubber.setPower(0);
-        }*/
+        }
 
         if (gamepad1.start && startCheck) {
             robot.FrontRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);

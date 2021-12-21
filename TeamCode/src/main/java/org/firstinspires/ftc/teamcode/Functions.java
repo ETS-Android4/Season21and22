@@ -53,6 +53,8 @@ public class Functions {
         setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         runToPosition(Dump);
         runToPosition(Spin);
+        Spin.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        Dump.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         changeZero();
     }
 
