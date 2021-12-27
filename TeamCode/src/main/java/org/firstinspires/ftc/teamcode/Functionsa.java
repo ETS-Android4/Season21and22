@@ -26,9 +26,9 @@ public class Functionsa {
     public DcMotorEx RearLeft  = null;
     public DcMotorEx RearRight  = null;
     public DcMotorEx Dump = null;
-    public DcMotorEx Spin = null;
-    public DcMotorEx Collect = null;
-    public DcMotorEx Rubber = null;
+    public DcMotorEx LinearSlide = null;
+    public DcMotorEx FrontCollector = null;
+    public DcMotorEx MidCollector = null;
     public BNO055IMU imu = null;
 
     HardwareMap hwMap = null;
@@ -44,18 +44,12 @@ public class Functionsa {
         RearLeft = (DcMotorEx) hwMap.dcMotor.get("rearLeft");
         RearRight = (DcMotorEx) hwMap.dcMotor.get("rearRight");
         Dump = (DcMotorEx) hwMap.dcMotor.get("dump");
-        Spin = (DcMotorEx) hwMap.dcMotor.get("spin");
-        Collect = (DcMotorEx) hwMap.dcMotor.get("collect");
-        Rubber = (DcMotorEx) hwMap.dcMotor.get("rubber");
+        LinearSlide = (DcMotorEx)hwMap.dcMotor.get("linearslide");
+        FrontCollector = (DcMotorEx)hwMap.dcMotor.get("frontcollector");
+        MidCollector = (DcMotorEx)hwMap.dcMotor.get("midcollector");
 
         imu = hwMap.get(BNO055IMU.class, "imu");
 
-        setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        runToPosition(Dump);
-        runToPosition(Spin);
-        Spin.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        Dump.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        changeZero();
     }
 
     public void setMode(DcMotor.RunMode mode){
@@ -81,12 +75,12 @@ public class Functionsa {
         zero++;
     }
 
-    public void spinPos(int position) {
-        Spin.setTargetPosition(position);
+    public void LinearSlidePos(int position) {
+        LinearSlide.setTargetPosition(position);
 
-        Spin.setPower(1);
-        while (Spin.isBusy()){}
-        Spin.setPower(0);
+        LinearSlide.setPower(1);
+        while (LinearSlide.isBusy()){}
+        LinearSlide.setPower(0);
     }
 
     public void dumpPos(int position) {

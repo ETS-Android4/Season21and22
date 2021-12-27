@@ -2,8 +2,6 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import org.firstinspires.ftc.teamcode.Functionsa;
 
 @TeleOp(name = "TeleOpOmni", group = "Final")
 public class TeleOpOmni extends OpMode {
@@ -41,13 +39,13 @@ public class TeleOpOmni extends OpMode {
         }
 
         if(gamepad1.a){
-            fun.spinPos(0);
+            fun.LinearSlidePos(0);
         }
         else if(gamepad1.b){
-            fun.spinPos(-500);
+            fun.LinearSlidePos(-500);
         }
         else if(gamepad1.y) {
-            fun.spinPos(-1000);
+            fun.LinearSlidePos(-1000);
         }
 
         if(gamepad1.dpad_up){
@@ -61,20 +59,20 @@ public class TeleOpOmni extends OpMode {
         }
 
         if(gamepad1.right_trigger > 0) {
-            fun.Collect.setPower(gamepad1.right_trigger);
+            fun.FrontCollector.setPower(gamepad1.right_trigger);
         }
         else {
-            fun.Collect.setPower(-gamepad1.left_trigger);
+            fun.FrontCollector.setPower(-gamepad1.left_trigger);
         }
 
         if(gamepad1.right_bumper){
-            fun.Rubber.setPower(1);
+            fun.MidCollector.setPower(1);
         }
         else if(gamepad1.left_bumper){
-            fun.Rubber.setPower(-1);
+            fun.MidCollector.setPower(-1);
         }
         else {
-            fun.Rubber.setPower(0);
+            fun.MidCollector.setPower(0);
         }
 
         if (gamepad1.start && startCheck) {
