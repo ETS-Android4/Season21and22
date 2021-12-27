@@ -10,7 +10,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 
-public class Functions {
+public class Functionsa {
     Auto auto = new Auto();
     private int zero = 0;
     private float targetHeading = 0;
@@ -34,7 +34,7 @@ public class Functions {
     HardwareMap hwMap = null;
     Orientation angles;
 
-    public Functions (){}
+    public Functionsa (){}
 
     public void init (HardwareMap ahwMap){
         hwMap = ahwMap;

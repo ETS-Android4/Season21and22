@@ -3,11 +3,11 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import org.firstinspires.ftc.teamcode.Functions;
+import org.firstinspires.ftc.teamcode.Functionsa;
 
 @TeleOp(name = "TeleOpOmni", group = "Final")
 public class TeleOpOmni extends OpMode {
-    Functions fun = new Functions();
+    Functionsa fun = new Functionsa();
 
     boolean startCheck = true;
     boolean xCheck = true;
