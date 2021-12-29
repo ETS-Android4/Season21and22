@@ -75,7 +75,7 @@ public class Functionsa {
         zero++;
     }
 
-    public void LinearSlidePos(int position) {
+    public void linearSlidePos(int position) {
         LinearSlide.setTargetPosition(position);
 
         LinearSlide.setPower(1);

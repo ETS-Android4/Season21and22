@@ -39,13 +39,13 @@ public class TeleOpOmni extends OpMode {
         }
 
         if(gamepad1.a){
-            fun.LinearSlidePos(0);
+            fun.linearSlidePos(0);
         }
         else if(gamepad1.b){
-            fun.LinearSlidePos(-500);
+            fun.linearSlidePos(-500);
         }
         else if(gamepad1.y) {
-            fun.LinearSlidePos(-1000);
+            fun.linearSlidePos(-1000);
         }
 
         if(gamepad1.dpad_up){
