@@ -11,7 +11,6 @@ import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 
 public class Functionsa {
-    Auto auto = new Auto();
     private int zero = 0;
     private float targetHeading = 0;
     private float currentHeading = 0;
@@ -49,7 +48,6 @@ public class Functionsa {
         MidCollector = (DcMotorEx)hwMap.dcMotor.get("midcollector");
 
         imu = hwMap.get(BNO055IMU.class, "imu");
-
     }
 
     public void setMode(DcMotor.RunMode mode){
@@ -131,7 +129,7 @@ public class Functionsa {
         RearLeft.setTargetPosition(RearLeft.getCurrentPosition() + distance);
 
         DriveStraight(power);
-        while ((FrontRight.isBusy() && RearLeft.isBusy() && RearRight.isBusy() && FrontLeft.isBusy()) && auto.opModeIsActive()) {
+        while ((FrontRight.isBusy() && RearLeft.isBusy() && RearRight.isBusy() && FrontLeft.isBusy())) {
             checkOrientation();
             if(distance == Math.abs(distance)) {
                 if (currentHeading > targetHeading + 1) {
