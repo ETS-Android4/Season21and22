@@ -14,11 +14,12 @@ import com.qualcomm.robotcore.util.Range;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import org.firstinspires.ftc.robotcore.external.navigation.Position;
 import org.firstinspires.ftc.robotcore.external.navigation.Velocity;
 
-@Autonomous(name = "Auto", group = "Final")
+@Autonomous(name = "AutoBase", group = "Final")
 public class AutoBase extends LinearOpMode {
     HWMap robot = new HWMap();
     Orientation angles;
@@ -32,7 +33,7 @@ public class AutoBase extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
-        BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
+        /*BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
         parameters.angleUnit = BNO055IMU.AngleUnit.DEGREES;
         parameters.accelUnit = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
         parameters.calibrationDataFile = "BNO055IMUCalibration.json";
@@ -40,10 +41,10 @@ public class AutoBase extends LinearOpMode {
         parameters.loggingTag = "IMU";
         parameters.accelerationIntegrationAlgorithm = new JustLoggingAccelerationIntegrator();
         int relativeLayoutId = hardwareMap.appContext.getResources().getIdentifier("RelativeLayout", "id", hardwareMap.appContext.getPackageName());
-        final View relativeLayout = ((Activity) hardwareMap.appContext).findViewById(relativeLayoutId);
+        final View relativeLayout = ((Activity) hardwareMap.appContext).findViewById(relativeLayoutId);*/
 
         robot.init(hardwareMap);
-        robot.imu.initialize(parameters);
+        //robot.imu.initialize(parameters);
         robot.FrontRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         robot.FrontLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         robot.RearRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -62,16 +63,16 @@ public class AutoBase extends LinearOpMode {
         robot.RearLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         waitForStart();
-        robot.imu.startAccelerationIntegration(new Position(), new Velocity(), 1000);
+        /*robot.imu.startAccelerationIntegration(new Position(), new Velocity(), 1000);
         relativeLayout.post(new Runnable() {
             public void run() {
                 relativeLayout.setBackgroundColor(Color.WHITE);
             }
-        });
+        });*/
 
-        DriveStraightDistance(538, 0.5);
+        DriveStraightDistance(5370, 0.5);
         sleep(5000);
-        DriveStraightDistance((int)(537.7/(3.1415926535*3.75)), 0.5);
+        //DriveStraightDistance((int)(537.7/(3.1415926535*3.75)), 0.5);
 
         //DISTANCES
         //38" from edge to shipping hub
@@ -122,44 +123,8 @@ public class AutoBase extends LinearOpMode {
         robot.RearLeft.setTargetPosition(robot.RearLeft.getCurrentPosition() + distance);
 
         DriveStraight(power);
-        while ((robot.FrontRight.isBusy() && robot.RearLeft.isBusy() && robot.RearRight.isBusy() && robot.FrontLeft.isBusy())) {
-            checkOrientation();
-            if(distance == Math.abs(distance)) {
-                if (currentHeading > targetHeading + 1) {
-                    robot.FrontRight.setPower(power * 0.9);
-                    robot.FrontLeft.setPower(power * 1.1);
-                    robot.RearRight.setPower(power * 0.9);
-                    robot.RearLeft.setPower(power * 1.1);
-                } else if (currentHeading < targetHeading - 1) {
-                    robot.FrontRight.setPower(power * 1.1);
-                    robot.FrontLeft.setPower(power * 0.9);
-                    robot.RearRight.setPower(power * 1.1);
-                    robot.RearLeft.setPower(power * 0.9);
-                } else {
-                    robot.FrontRight.setPower(power);
-                    robot.FrontLeft.setPower(power);
-                    robot.RearRight.setPower(power);
-                    robot.RearLeft.setPower(power);
-                }
-            }
-            else{
-                if (currentHeading > targetHeading + 1) {
-                    robot.FrontRight.setPower(power * 1.1);
-                    robot.FrontLeft.setPower(power * 0.9);
-                    robot.RearRight.setPower(power * 1.1);
-                    robot.RearLeft.setPower(power * 0.9);
-                } else if (currentHeading < targetHeading - 1) {
-                    robot.FrontRight.setPower(power * 0.9);
-                    robot.FrontLeft.setPower(power * 1.1);
-                    robot.RearRight.setPower(power * 0.9);
-                    robot.RearLeft.setPower(power * 1.1);
-                } else {
-                    robot.FrontRight.setPower(power);
-                    robot.FrontLeft.setPower(power);
-                    robot.RearRight.setPower(power);
-                    robot.RearLeft.setPower(power);
-                }
-            }
+        while ((robot.FrontRight.isBusy() && robot.RearLeft.isBusy() && robot.RearRight.isBusy() && robot.FrontLeft.isBusy()) && opModeIsActive()) {
+            idle();
         }
 
         StopDriving();
@@ -176,44 +141,6 @@ public class AutoBase extends LinearOpMode {
         DriveStraight(power);
         while ((robot.FrontRight.isBusy() && robot.RearLeft.isBusy() && robot.RearRight.isBusy() && robot.FrontLeft.isBusy()) && opModeIsActive()) {
             idle();
-
-            checkOrientation();
-            if(distance == Math.abs(distance)) {
-                if (currentHeading > targetHeading + 1) {
-                    robot.FrontRight.setPower(power * 0.9);
-                    robot.FrontLeft.setPower(power * 0.9);
-                    robot.RearRight.setPower(power * 1.1);
-                    robot.RearLeft.setPower(power * 1.1);
-                } else if (currentHeading < targetHeading - 1) {
-                    robot.FrontRight.setPower(power * 1.1);
-                    robot.FrontLeft.setPower(power * 1.1);
-                    robot.RearRight.setPower(power * 0.9);
-                    robot.RearLeft.setPower(power * 0.9);
-                } else {
-                    robot.FrontRight.setPower(power);
-                    robot.FrontLeft.setPower(power);
-                    robot.RearRight.setPower(power);
-                    robot.RearLeft.setPower(power);
-                }
-            }
-            else{
-                if (currentHeading > targetHeading + 1) {
-                    robot.FrontRight.setPower(power * 1.1);
-                    robot.FrontLeft.setPower(power * 1.1);
-                    robot.RearRight.setPower(power * 0.9);
-                    robot.RearLeft.setPower(power * 0.9);
-                } else if (currentHeading < targetHeading - 1) {
-                    robot.FrontRight.setPower(power * 0.9);
-                    robot.FrontLeft.setPower(power * 0.9);
-                    robot.RearRight.setPower(power * 1.1);
-                    robot.RearLeft.setPower(power * 1.1);
-                } else {
-                    robot.FrontRight.setPower(power);
-                    robot.FrontLeft.setPower(power);
-                    robot.RearRight.setPower(power);
-                    robot.RearLeft.setPower(power);
-                }
-            }
         }
 
         StopDriving();
@@ -228,42 +155,6 @@ public class AutoBase extends LinearOpMode {
         DriveStraight(power);
         while ((robot.FrontRight.isBusy() && robot.RearLeft.isBusy() && robot.RearRight.isBusy() && robot.FrontLeft.isBusy()) && opModeIsActive()) {
             idle();
-            checkOrientation();
-            if (distance == Math.abs(distance)) {
-                if (currentHeading > targetHeading + 1) {
-                    robot.FrontRight.setPower(power * 0.9);
-                    robot.FrontLeft.setPower(power * 1.1);
-                    robot.RearRight.setPower(power * 0.9);
-                    robot.RearLeft.setPower(power * 1.1);
-                } else if (currentHeading < targetHeading - 1) {
-                    robot.FrontRight.setPower(power * 1.1);
-                    robot.FrontLeft.setPower(power * 0.9);
-                    robot.RearRight.setPower(power * 1.1);
-                    robot.RearLeft.setPower(power * 0.9);
-                } else {
-                    robot.FrontRight.setPower(power);
-                    robot.FrontLeft.setPower(power);
-                    robot.RearRight.setPower(power);
-                    robot.RearLeft.setPower(power);
-                }
-            } else {
-                if (currentHeading > targetHeading + 1) {
-                    robot.FrontRight.setPower(power * 1.1);
-                    robot.FrontLeft.setPower(power * 0.9);
-                    robot.RearRight.setPower(power * 1.1);
-                    robot.RearLeft.setPower(power * 0.9);
-                } else if (currentHeading < targetHeading - 1) {
-                    robot.FrontRight.setPower(power * 0.9);
-                    robot.FrontLeft.setPower(power * 1.1);
-                    robot.RearRight.setPower(power * 0.9);
-                    robot.RearLeft.setPower(power * 1.1);
-                } else {
-                    robot.FrontRight.setPower(power);
-                    robot.FrontLeft.setPower(power);
-                    robot.RearRight.setPower(power);
-                    robot.RearLeft.setPower(power);
-                }
-            }
         }
         /*if(half) {
             checkOrientation();
@@ -274,16 +165,24 @@ public class AutoBase extends LinearOpMode {
         sleep(10);
     }
 
-    public void checkOrientation() {
+    /*public void checkOrientation() {
         // read the orientation of the robot
         angles = robot.imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
         robot.imu.getPosition();
         // and save the heading
         currentHeading = angles.firstAngle;
-    }
+    }*/
 
     public int Scan() {
-        return 1;
+        if(robot.distRight.getDistance(DistanceUnit.INCH) < 20) {
+            return 1;
+        }
+        else if(robot.distRight.getDistance(DistanceUnit.INCH) > 30) {
+            return 3;
+        }
+        else {
+            return 2;
+        }
     }
 
     public void linearSlidePos(int position) {
@@ -300,5 +199,11 @@ public class AutoBase extends LinearOpMode {
         robot.Dump.setPower(1);
         while (robot.Dump.isBusy()){}
         robot.Dump.setPower(0);
+    }
+
+    public void duck (int seconds) {
+        robot.duck.setPower(1);
+        sleep(seconds);
+        robot.duck.setPower(0);
     }
 }

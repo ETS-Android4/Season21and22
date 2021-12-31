@@ -50,38 +50,45 @@ public class TeleOpBase extends OpMode {
         robot.RearRight.setVelocity((rearright*rearright*Math.signum(rearright))/2700);
         robot.RearLeft.setVelocity((rearleft*rearleft*Math.signum(rearleft))/2700);
 
-        if(gamepad1.a){
+        if(gamepad2.x){
             linearSlidePos(0);
         }
-        else if(gamepad1.b){
+        else if(gamepad2.y){
             linearSlidePos(-500);
         }
-        else if(gamepad1.x) {
+        else if(gamepad2.b) {
             linearSlidePos(-1000);
         }
 
-        if(gamepad1.dpad_left){
+        if(gamepad2.dpad_up){
             dumpPos(0);
         }
-        else if(gamepad1.dpad_up){
+        else if(gamepad2.dpad_left){
             dumpPos(-300);
         }
-        else if(gamepad1.dpad_right) {
+        else if(gamepad2.dpad_right) {
             dumpPos(500);
         }
 
-        if(gamepad1.right_trigger > 0) {
-            robot.FrontCollector.setPower(gamepad1.right_trigger);
+        if(gamepad1.right_trigger > 0 || gamepad1.right_bumper){
+            robot.duck.setPower(1);
         }
-        else {
-            robot.FrontCollector.setPower(-gamepad1.left_trigger);
+        else if(gamepad1.left_trigger > 0 || gamepad1.left_bumper){
+            robot.duck.setPower(-1);
         }
 
-        if(gamepad1.right_bumper){
-            robot.MidCollector.setPower(1);
+        if(gamepad2.right_trigger > 0) {
+            robot.FrontCollector.setPower(gamepad2.right_trigger);
         }
-        else if(gamepad1.left_bumper){
+        else {
+            robot.FrontCollector.setPower(-gamepad2.left_trigger);
+        }
+
+        if(gamepad2.right_bumper){
             robot.MidCollector.setPower(-1);
+        }
+        else if(gamepad2.left_bumper){
+            robot.MidCollector.setPower(1);
         }
         else {
             robot.MidCollector.setPower(0);

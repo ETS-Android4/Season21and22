@@ -1,7 +1,9 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 //This is NOT an OpMode
@@ -16,8 +18,12 @@ public class HWMap {
     public DcMotorEx LinearSlide = null;
     public DcMotorEx FrontCollector = null;
     public DcMotorEx MidCollector = null;
+    public CRServo duck = null;
+
+    public DistanceSensor distRight = null;
 
     public BNO055IMU imu = null;
+
     /* local OpMode members. */
     HardwareMap hwMap = null;
 
@@ -37,6 +43,9 @@ public class HWMap {
         LinearSlide = (DcMotorEx)hwMap.dcMotor.get("linearslide");
         FrontCollector = (DcMotorEx)hwMap.dcMotor.get("frontcollector");
         MidCollector = (DcMotorEx)hwMap.dcMotor.get("midcollector");
+        duck = hwMap.crservo.get("duck");
+
+        distRight = hwMap.get(DistanceSensor.class, "distright");
 
         imu = hwMap.get(BNO055IMU.class, "imu");
     }
