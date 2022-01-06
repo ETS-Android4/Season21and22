@@ -70,8 +70,10 @@ public class AutoBase extends LinearOpMode {
             }
         });*/
 
-        DriveStraightDistance(5370, 0.5);
-        sleep(5000);
+        DriveStraightDistance(-500, 0.5);
+        sleep(1000);
+        duck(10);
+        DriveStraightDistance(50000, 1);
         //DriveStraightDistance((int)(537.7/(3.1415926535*3.75)), 0.5);
 
         //DISTANCES
@@ -120,7 +122,7 @@ public class AutoBase extends LinearOpMode {
         robot.FrontRight.setTargetPosition(robot.FrontRight.getCurrentPosition() - distance);
         robot.FrontLeft.setTargetPosition(robot.FrontLeft.getCurrentPosition() + distance);
         robot.RearRight.setTargetPosition(robot.RearRight.getCurrentPosition() - distance);
-        robot.RearLeft.setTargetPosition(robot.RearLeft.getCurrentPosition() + distance);
+        robot.RearLeft.setTargetPosition(robot.RearLeft.getCurrentPosition() - distance);
 
         DriveStraight(power);
         while ((robot.FrontRight.isBusy() && robot.RearLeft.isBusy() && robot.RearRight.isBusy() && robot.FrontLeft.isBusy()) && opModeIsActive()) {
@@ -203,7 +205,7 @@ public class AutoBase extends LinearOpMode {
 
     public void duck (int seconds) {
         robot.duck.setPower(1);
-        sleep(seconds);
+        sleep(seconds*1000);
         robot.duck.setPower(0);
     }
 }

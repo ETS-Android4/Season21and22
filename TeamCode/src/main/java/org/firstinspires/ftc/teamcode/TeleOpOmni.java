@@ -30,49 +30,56 @@ public class TeleOpOmni extends OpMode {
             xCheck = true;
         }
 
-        if(gamepad1.dpad_left && speedModulo) {
+        if(gamepad1.a && speedModulo) {
             fun.altSpeed();
             speedModulo = false;
         }
-        else if(!gamepad1.dpad_left) {
+        else if(!gamepad1.a) {
             speedModulo = true;
         }
 
-        if(gamepad1.a){
+        if(gamepad2.x){
             fun.linearSlidePos(0);
         }
-        else if(gamepad1.b){
+        else if(gamepad2.y){
             fun.linearSlidePos(-500);
         }
-        else if(gamepad1.y) {
+        else if(gamepad2.b) {
             fun.linearSlidePos(-1000);
         }
 
-        if(gamepad1.dpad_up){
-            fun.dumpPos(0);
+        if(gamepad2.dpad_left){
+            fun.Dump.setPower(0.5);
         }
-        else if(gamepad1.dpad_left){
-            fun.dumpPos(-300);
-        }
-        else if(gamepad1.dpad_right) {
-            fun.dumpPos(500);
-        }
-
-        if(gamepad1.right_trigger > 0) {
-            fun.FrontCollector.setPower(gamepad1.right_trigger);
+        else if(gamepad2.dpad_right) {
+            fun.Dump.setPower(-0.5);
         }
         else {
-            fun.FrontCollector.setPower(-gamepad1.left_trigger);
+            fun.Dump.setPower(0);
         }
 
-        if(gamepad1.right_bumper){
+        if(gamepad2.right_trigger > 0) {
+            fun.FrontCollector.setPower(gamepad2.right_trigger);
+        }
+        else {
+            fun.FrontCollector.setPower(-gamepad2.left_trigger);
+        }
+
+        if(gamepad2.right_bumper){
             fun.MidCollector.setPower(1);
         }
-        else if(gamepad1.left_bumper){
+        else if(gamepad2.left_bumper){
             fun.MidCollector.setPower(-1);
         }
         else {
             fun.MidCollector.setPower(0);
+        }
+
+        if(gamepad1.right_trigger > 0 || gamepad1.right_bumper){
+            fun.duck.setPower(1);
+        }
+        else if(gamepad1.left_trigger > 0 || gamepad1.left_bumper){
+            fun.duck.setPower(-1);
         }
 
         if (gamepad1.start && startCheck) {

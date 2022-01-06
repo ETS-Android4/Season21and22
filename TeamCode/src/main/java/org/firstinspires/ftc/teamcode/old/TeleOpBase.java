@@ -14,7 +14,9 @@ public class TeleOpBase extends OpMode {
     HWMap robot = new HWMap();
     //robotctions robot = new robotctions();
     boolean startCheck = true;
+    boolean speedModulo = true;
     int start = 0;
+    float speedMod = 1f;
     float frontright = 0;
     float frontleft = 0;
     float rearright = 0;
@@ -26,16 +28,12 @@ public class TeleOpBase extends OpMode {
         robot.LinearSlide.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         robot.Dump.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-        robot.FrontRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        robot.FrontLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        robot.RearRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        robot.RearLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        robot.LinearSlide.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.Dump.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.LinearSlide.setTargetPosition(0);
-        robot.Dump.setTargetPosition(0);
-        robot.LinearSlide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        robot.Dump.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        robot.FrontRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        robot.FrontLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        robot.RearRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        robot.RearLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        robot.Dump.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        robot.LinearSlide.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
 
     @Override
@@ -45,29 +43,42 @@ public class TeleOpBase extends OpMode {
         rearright = 2700 * (-gamepad1.right_stick_y + gamepad1.right_stick_x);
         rearleft = 2700 * (gamepad1.left_stick_y + gamepad1.left_stick_x);
 
-        robot.FrontRight.setVelocity((frontright*frontright*Math.signum(frontright))/2700);
-        robot.FrontLeft.setVelocity((frontleft*frontleft*Math.signum(frontleft))/2700);
-        robot.RearRight.setVelocity((rearright*rearright*Math.signum(rearright))/2700);
-        robot.RearLeft.setVelocity((rearleft*rearleft*Math.signum(rearleft))/2700);
+        robot.FrontRight.setVelocity(speedMod*(frontright*frontright*Math.signum(frontright))/2700);
+        robot.FrontLeft.setVelocity(speedMod*(frontleft*frontleft*Math.signum(frontleft))/2700);
+        robot.RearRight.setVelocity(speedMod*(rearright*rearright*Math.signum(rearright))/2700);
+        robot.RearLeft.setVelocity(speedMod*(rearleft*rearleft*Math.signum(rearleft))/2700);
 
         if(gamepad2.x){
-            linearSlidePos(0);
-        }
-        else if(gamepad2.y){
-            linearSlidePos(-500);
+            robot.LinearSlide.setPower(0.5);
         }
         else if(gamepad2.b) {
-            linearSlidePos(-1000);
+            robot.LinearSlide.setPower(-0.5);
+        }
+        else {
+            robot.LinearSlide.setPower(0);
         }
 
-        if(gamepad2.dpad_up){
-            dumpPos(0);
+        if(gamepad1.a && speedModulo) {
+            if(speedMod == 1f) {
+                speedMod = 0.5f;
+            }
+            else {
+                speedMod = 1f;
+            }
+            speedModulo = false;
         }
-        else if(gamepad2.dpad_left){
-            dumpPos(-300);
+        else if(!gamepad1.a) {
+            speedModulo = true;
+        }
+
+        if(gamepad2.dpad_left){
+            robot.Dump.setPower(-0.5);
         }
         else if(gamepad2.dpad_right) {
-            dumpPos(500);
+            robot.Dump.setPower(0.5);
+        }
+        else {
+            robot.Dump.setPower(0);
         }
 
         if(gamepad1.right_trigger > 0 || gamepad1.right_bumper){
@@ -75,6 +86,9 @@ public class TeleOpBase extends OpMode {
         }
         else if(gamepad1.left_trigger > 0 || gamepad1.left_bumper){
             robot.duck.setPower(-1);
+        }
+        else {
+            robot.duck.setPower(0);
         }
 
         if(gamepad2.right_trigger > 0) {

@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -28,6 +29,7 @@ public class Functionsa {
     public DcMotorEx LinearSlide = null;
     public DcMotorEx FrontCollector = null;
     public DcMotorEx MidCollector = null;
+    public CRServo duck = null;
     public BNO055IMU imu = null;
 
     HardwareMap hwMap = null;
@@ -46,8 +48,14 @@ public class Functionsa {
         LinearSlide = (DcMotorEx)hwMap.dcMotor.get("linearslide");
         FrontCollector = (DcMotorEx)hwMap.dcMotor.get("frontcollector");
         MidCollector = (DcMotorEx)hwMap.dcMotor.get("midcollector");
+        duck = hwMap.crservo.get("duck");
 
         imu = hwMap.get(BNO055IMU.class, "imu");
+        runToPosition(LinearSlide);
+        changeZero();
+        LinearSlide.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        Dump.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
 
     public void setMode(DcMotor.RunMode mode){
