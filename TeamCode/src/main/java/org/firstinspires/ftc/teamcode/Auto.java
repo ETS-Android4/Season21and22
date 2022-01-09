@@ -39,6 +39,8 @@ public class Auto extends LinearOpMode {
         fun.runToPosition(fun.FrontLeft);
         fun.runToPosition(fun.RearRight);
         fun.runToPosition(fun.RearLeft);
+        fun.runToPosition(fun.LinearSlide);
+        fun.runToPosition(fun.Dump);
         fun.changeZero();
 
         waitForStart();
@@ -49,19 +51,18 @@ public class Auto extends LinearOpMode {
             }
         });
 
-        fun.DriveStraightDistance(538, 0.5);
-        sleep(5000);
-        fun.DriveStraightDistance((int)(537.7/(3.1415926535*3.75)), 0.5);
-
         //DISTANCES
         //38" from edge to shipping hub
         //17" robot length
         //48" to duck
-        /*fun.DriveStraightDistance(21, 1);
-        int i = fun.scan();
+        fun.DriveStraightDistance(17, 0.8);
+        sleep(100);
+        int i = fun.Scan();
         switch (i) {
             case 1:
                 fun.linearSlidePos(0);
+                sleep(100);
+                fun.DriveStraightDistance(-2, 0.8);
                 break;
             case 2:
                 fun.linearSlidePos(-500);
@@ -70,17 +71,30 @@ public class Auto extends LinearOpMode {
                 fun.linearSlidePos(-1000);
                 break;
         }
-        fun.dumpPos(-300);
         sleep(500);
+        fun.dumpPos(-500);
+        sleep(1000);
         fun.dumpPos(0);
         fun.linearSlidePos(0);
-        fun.DriveStraightDistance(-22, 1);
+        fun.DriveStraightDistance(-20, 1);
+        sleep(500);
         fun.DriveStraightDistance(2, 0.6);
-        fun.Strafe(-48, 0.8);
-        fun.duck(3);
+        sleep(500);
+        fun.Strafe(46, 0.8);
+        sleep(500);
+        duck(5);
         fun.Strafe(2, 0.8);
-        fun.Turn(90, 0.6);
+        sleep(500);
+        fun.Turn(3000, 0.6, -90);
+        sleep(500);
         fun.Strafe(3, 1);
-        fun.DriveStraightDistance(144, 1);*/
+        sleep(500);
+        fun.DriveStraightDistance(144, 1);
+    }
+
+    public void duck (int seconds) {
+        fun.duck.setPower(1);
+        sleep(seconds*1000);
+        fun.duck.setPower(0);
     }
 }

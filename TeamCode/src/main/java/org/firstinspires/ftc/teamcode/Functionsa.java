@@ -1,20 +1,25 @@
 package org.firstinspires.ftc.teamcode;
 
+import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.telemetry;
+
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 
 public class Functionsa {
     private int zero = 0;
     private float targetHeading = 0;
     private float currentHeading = 0;
+    private int countsDistance = 0;
     private static final float COUNTS_PER_REV = 537.7f;
     private static final float GEAR_REDUCTION = 1.0f;
     private static final float WHEEL_DIAMETER = 3.75f;
@@ -30,6 +35,7 @@ public class Functionsa {
     public DcMotorEx FrontCollector = null;
     public DcMotorEx MidCollector = null;
     public CRServo duck = null;
+    public DistanceSensor distRight = null;
     public BNO055IMU imu = null;
 
     HardwareMap hwMap = null;
@@ -49,6 +55,7 @@ public class Functionsa {
         FrontCollector = (DcMotorEx)hwMap.dcMotor.get("frontcollector");
         MidCollector = (DcMotorEx)hwMap.dcMotor.get("midcollector");
         duck = hwMap.crservo.get("duck");
+        distRight = hwMap.get(DistanceSensor.class, "distright");
 
         imu = hwMap.get(BNO055IMU.class, "imu");
         runToPosition(LinearSlide);
@@ -130,11 +137,12 @@ public class Functionsa {
         DriveStraight(0);
     }
 
-    public void DriveStraightDistance(int distance, double power) {
-        FrontRight.setTargetPosition(FrontRight.getCurrentPosition() - distance);
-        FrontLeft.setTargetPosition(FrontLeft.getCurrentPosition() + distance);
-        RearRight.setTargetPosition(RearRight.getCurrentPosition() - distance);
-        RearLeft.setTargetPosition(RearLeft.getCurrentPosition() + distance);
+    public void DriveStraightDistance(double distance, double power) {
+        countsDistance = (int)(COUNTS_PER_INCH*distance);
+        FrontRight.setTargetPosition(FrontRight.getCurrentPosition() - countsDistance);
+        FrontLeft.setTargetPosition(FrontLeft.getCurrentPosition() + countsDistance);
+        RearRight.setTargetPosition(RearRight.getCurrentPosition() - countsDistance);
+        RearLeft.setTargetPosition(RearLeft.getCurrentPosition() + countsDistance);
 
         DriveStraight(power);
         while ((FrontRight.isBusy() && RearLeft.isBusy() && RearRight.isBusy() && FrontLeft.isBusy())) {
@@ -174,6 +182,99 @@ public class Functionsa {
                     RearRight.setPower(power);
                     RearLeft.setPower(power);
                 }
+            }
+        }
+
+        StopDriving();
+    }
+
+    public int Scan() {
+        int distance = 0;
+        for(int i = 0; i < 50; i++) {
+            if (distRight.getDistance(DistanceUnit.INCH) < 20) {
+                distance += 1;
+            } else if (distRight.getDistance(DistanceUnit.INCH) > 30) {
+                distance += 3;
+            } else {
+                distance += 2;
+            }
+        }
+        return distance/100;
+    }
+
+    public void Strafe(double distance, double power) {
+        countsDistance = (int)(COUNTS_PER_INCH*distance);
+        FrontRight.setTargetPosition(FrontRight.getCurrentPosition() - countsDistance);
+        FrontLeft.setTargetPosition(FrontLeft.getCurrentPosition() - countsDistance);
+        RearRight.setTargetPosition(RearRight.getCurrentPosition() + countsDistance);
+        RearLeft.setTargetPosition(RearLeft.getCurrentPosition() + countsDistance);
+
+        DriveStraight(power);
+        while ((FrontRight.isBusy() && RearLeft.isBusy() && RearRight.isBusy() && FrontLeft.isBusy())) {
+            checkOrientation();
+            if(distance == Math.abs(distance)) {
+                if (currentHeading > targetHeading + 1) {
+                    FrontRight.setPower(power * 0.9);
+                    FrontLeft.setPower(power * 0.9);
+                    RearRight.setPower(power * 1.1);
+                    RearLeft.setPower(power * 1.1);
+                } else if (currentHeading < targetHeading - 1) {
+                    FrontRight.setPower(power * 1.1);
+                    FrontLeft.setPower(power * 1.1);
+                    RearRight.setPower(power * 0.9);
+                    RearLeft.setPower(power * 0.9);
+                } else {
+                    FrontRight.setPower(power);
+                    FrontLeft.setPower(power);
+                    RearRight.setPower(power);
+                    RearLeft.setPower(power);
+                }
+            }
+            else{
+                if (currentHeading > targetHeading + 1) {
+                    FrontRight.setPower(power * 1.1);
+                    FrontLeft.setPower(power * 1.1);
+                    RearRight.setPower(power * 0.9);
+                    RearLeft.setPower(power * 0.9);
+                } else if (currentHeading < targetHeading - 1) {
+                    FrontRight.setPower(power * 0.9);
+                    FrontLeft.setPower(power * 0.9);
+                    RearRight.setPower(power * 1.1);
+                    RearLeft.setPower(power * 1.1);
+                } else {
+                    FrontRight.setPower(power);
+                    FrontLeft.setPower(power);
+                    RearRight.setPower(power);
+                    RearLeft.setPower(power);
+                }
+            }
+        }
+
+        StopDriving();
+    }
+
+    public void Turn(int distance, double power, float target) {
+        targetHeading = target;
+
+        FrontRight.setTargetPosition(FrontRight.getCurrentPosition() + distance);
+        FrontLeft.setTargetPosition(FrontLeft.getCurrentPosition() + distance);
+        RearRight.setTargetPosition(RearRight.getCurrentPosition() + distance);
+        RearLeft.setTargetPosition(RearLeft.getCurrentPosition() + distance);
+
+        DriveStraight(power);
+        while ((FrontRight.isBusy() && RearLeft.isBusy() && RearRight.isBusy() && FrontLeft.isBusy())) {
+            checkOrientation();
+            if(Math.abs(currentHeading)-Math.abs(targetHeading) > 45){
+                FrontRight.setPower(power*1.1);
+                FrontLeft.setPower(power*1.1);
+                RearRight.setPower(power*1.1);
+                RearLeft.setPower(power*1.1);
+            }
+            else {
+                FrontRight.setPower(power*0.9);
+                FrontLeft.setPower(power*0.9);
+                RearRight.setPower(power*0.9);
+                RearLeft.setPower(power*0.9);
             }
         }
 

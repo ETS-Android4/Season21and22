@@ -15,7 +15,12 @@ public class TeleOpBase extends OpMode {
     //robotctions robot = new robotctions();
     boolean startCheck = true;
     boolean speedModulo = true;
-    int start = 0;
+
+    //boolean frontLCheck = true;
+    //boolean frontCheck = true;
+    //int start = 0;
+    //int mode = 0;
+    //int modeL = 0;
     float speedMod = 1f;
     float frontright = 0;
     float frontleft = 0;
@@ -93,11 +98,13 @@ public class TeleOpBase extends OpMode {
 
         if(gamepad2.right_trigger > 0) {
             robot.FrontCollector.setPower(gamepad2.right_trigger);
+            robot.MidCollector.setPower(-gamepad2.right_trigger);
         }
         else {
-            robot.FrontCollector.setPower(-gamepad2.left_trigger);
+            robot.FrontCollector.setPower(-gamepad2.right_trigger);
+            robot.MidCollector.setPower(gamepad2.right_trigger);
         }
-
+        /*
         if(gamepad2.right_bumper){
             robot.MidCollector.setPower(-1);
         }
@@ -107,6 +114,40 @@ public class TeleOpBase extends OpMode {
         else {
             robot.MidCollector.setPower(0);
         }
+
+        if(gamepad2.right_trigger > 0 && frontCheck){
+            if(mode == 0) {
+                robot.FrontCollector.setPower(1);
+                robot.MidCollector.setPower(-1);
+                mode = 1;
+            }
+            else if (mode == 1){
+                robot.FrontCollector.setPower(0);
+                robot.MidCollector.setPower(0);
+                mode = 0;
+            }
+            frontCheck = false;
+        }
+        else if(gamepad2.right_trigger == 0) {
+            frontCheck = true;
+        }
+
+        if(gamepad2.left_trigger > 0 && frontLCheck){
+            if(modeL == 0) {
+                robot.FrontCollector.setPower(-1);
+                robot.MidCollector.setPower(1);
+                modeL = 1;
+            }
+            else if (modeL == 1){
+                robot.FrontCollector.setPower(0);
+                robot.MidCollector.setPower(0);
+                modeL = 0;
+            }
+            frontLCheck = false;
+        }
+        else if(gamepad2.left_trigger == 0) {
+            frontLCheck = true;
+        }*/
 
         if (gamepad1.start && startCheck) {
             robot.FrontRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);

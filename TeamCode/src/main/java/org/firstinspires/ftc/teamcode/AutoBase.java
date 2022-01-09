@@ -122,7 +122,7 @@ public class AutoBase extends LinearOpMode {
         robot.FrontRight.setTargetPosition(robot.FrontRight.getCurrentPosition() - distance);
         robot.FrontLeft.setTargetPosition(robot.FrontLeft.getCurrentPosition() + distance);
         robot.RearRight.setTargetPosition(robot.RearRight.getCurrentPosition() - distance);
-        robot.RearLeft.setTargetPosition(robot.RearLeft.getCurrentPosition() - distance);
+        robot.RearLeft.setTargetPosition(robot.RearLeft.getCurrentPosition() + distance);
 
         DriveStraight(power);
         while ((robot.FrontRight.isBusy() && robot.RearLeft.isBusy() && robot.RearRight.isBusy() && robot.FrontLeft.isBusy()) && opModeIsActive()) {
