@@ -45,11 +45,6 @@ public class Auto extends LinearOpMode {
 
         waitForStart();
         fun.imu.startAccelerationIntegration(new Position(), new Velocity(), 1000);
-        relativeLayout.post(new Runnable() {
-            public void run() {
-                relativeLayout.setBackgroundColor(Color.WHITE);
-            }
-        });
 
         //DISTANCES
         //38" from edge to shipping hub
@@ -62,7 +57,7 @@ public class Auto extends LinearOpMode {
             case 1:
                 fun.linearSlidePos(0);
                 sleep(100);
-                fun.DriveStraightDistance(-2, 0.8);
+                fun.DriveStraightDistance(-1, 0.8);
                 break;
             case 2:
                 fun.linearSlidePos(-500);
@@ -72,28 +67,30 @@ public class Auto extends LinearOpMode {
                 break;
         }
         sleep(500);
-        fun.dumpPos(-500);
+        fun.dumpPos(-400);
         sleep(1000);
         fun.dumpPos(0);
         fun.linearSlidePos(0);
         fun.DriveStraightDistance(-20, 1);
         sleep(500);
-        fun.DriveStraightDistance(2, 0.6);
+        fun.DriveStraightDistance(4, 0.6);
         sleep(500);
-        fun.Strafe(46, 0.8);
+        fun.Strafe(48, 0.8);
         sleep(500);
         duck(5);
-        fun.Strafe(2, 0.8);
+        fun.Strafe(-2, 0.8);
         sleep(500);
-        fun.Turn(3000, 0.6, -90);
+        fun.Turn(-1000, 0.6, -90);
         sleep(500);
-        fun.Strafe(3, 1);
+        fun.Strafe(-6, 1);
         sleep(500);
-        fun.DriveStraightDistance(144, 1);
+        fun.DriveStraightDistance(80, 1);
+        fun.Strafe(-6, 1);
+        fun.DriveStraightDistance(40, 1);
     }
 
     public void duck (int seconds) {
-        fun.duck.setPower(1);
+        fun.duck.setPower(-1);
         sleep(seconds*1000);
         fun.duck.setPower(0);
     }

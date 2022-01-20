@@ -199,7 +199,7 @@ public class Functionsa {
                 distance += 2;
             }
         }
-        return distance/100;
+        return distance/50;
     }
 
     public void Strafe(double distance, double power) {

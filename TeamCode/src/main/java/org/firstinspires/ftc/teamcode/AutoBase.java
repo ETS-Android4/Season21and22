@@ -23,9 +23,21 @@ import org.firstinspires.ftc.robotcore.external.navigation.Velocity;
 public class AutoBase extends LinearOpMode {
     HWMap robot = new HWMap();
     Orientation angles;
-    private float targetHeading = 0;
-    private float currentHeading = 0;
+    private double targetHeading = 0;
+    private double currentHeading = 0;
     private double turn_error = 0;
+    double offset = 0;
+    double p = 0;
+    double k_p = 0.002;
+    double turn_k_p = 0.08;
+    /*double k_p = 0.0028;
+    double turn_k_p = 0.02;*/
+    double steer = 0;
+    double output = 0;
+    double drive_speed = 0.9;
+    double turn_speed = 0.7;
+    double drive_speed3 = 1;
+    double turn_speed3 = 0.8;
     private static final float COUNTS_PER_REV = 537.7f;
     private static final float GEAR_REDUCTION = 1.0f;
     private static final float WHEEL_DIAMETER = 3.75f;
@@ -33,106 +45,179 @@ public class AutoBase extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
-        /*BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
+        BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
         parameters.angleUnit = BNO055IMU.AngleUnit.DEGREES;
         parameters.accelUnit = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
         parameters.calibrationDataFile = "BNO055IMUCalibration.json";
         parameters.loggingEnabled = true;
         parameters.loggingTag = "IMU";
         parameters.accelerationIntegrationAlgorithm = new JustLoggingAccelerationIntegrator();
-        int relativeLayoutId = hardwareMap.appContext.getResources().getIdentifier("RelativeLayout", "id", hardwareMap.appContext.getPackageName());
-        final View relativeLayout = ((Activity) hardwareMap.appContext).findViewById(relativeLayoutId);*/
 
         robot.init(hardwareMap);
-        //robot.imu.initialize(parameters);
+        robot.imu.initialize(parameters);
         robot.FrontRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         robot.FrontLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         robot.RearRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         robot.RearLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.Dump.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.LinearSlide.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
         robot.FrontRight.setTargetPosition(0);
         robot.FrontLeft.setTargetPosition(0);
         robot.RearRight.setTargetPosition(0);
         robot.RearLeft.setTargetPosition(0);
+        robot.Dump.setTargetPosition(0);
+        robot.LinearSlide.setTargetPosition(0);
+
         robot.FrontRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         robot.FrontLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         robot.RearRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         robot.RearLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        robot.Dump.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        robot.LinearSlide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
         robot.FrontRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         robot.FrontLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         robot.RearRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         robot.RearLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        robot.Dump.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        robot.LinearSlide.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
+        while (!isStopRequested() && !robot.imu.isGyroCalibrated()) {
+            sleep(50);
+            idle();
+        }
+        telemetry.addData("IMU calibration status", robot.imu.getCalibrationStatus().toString());
+        telemetry.update();
         waitForStart();
-        /*robot.imu.startAccelerationIntegration(new Position(), new Velocity(), 1000);
-        relativeLayout.post(new Runnable() {
-            public void run() {
-                relativeLayout.setBackgroundColor(Color.WHITE);
-            }
-        });*/
+        robot.imu.startAccelerationIntegration(new Position(), new Velocity(), 1000);
 
-        DriveStraightDistance(-500, 0.5);
-        sleep(1000);
-        duck(10);
-        DriveStraightDistance(50000, 1);
-        //DriveStraightDistance((int)(537.7/(3.1415926535*3.75)), 0.5);
+        checkOrientation();
+        offset = currentHeading;
 
-        //DISTANCES
-        //38" from edge to shipping hub
-        //17" robot length
-        //48" to duck
-        /*DriveStraightDistance(21, 1);
+        DriveStraightDistance(17, false);
+        sleep(100);
+        orient(0.5);
         int i = Scan();
         switch (i) {
             case 1:
                 linearSlidePos(0);
+                sleep(100);
+                DriveStraightDistance(-2, false);
                 break;
             case 2:
                 linearSlidePos(-500);
                 break;
             case 3:
                 linearSlidePos(-1000);
+                sleep(100);
+                DriveStraightDistance(2, false);
                 break;
         }
-        dumpPos(-300);
         sleep(500);
+        dumpPos(-400);
+        sleep(1000);
         dumpPos(0);
         linearSlidePos(0);
-        DriveStraightDistance(-22, 1);
-        DriveStraightDistance(2, 0.6);
-        Strafe(-48, 0.8);
-        duck(3);
-        Strafe(2, 0.8);
-        Turn(90, 0.6);
-        Strafe(3, 1);
-        DriveStraightDistance(144, 1);*/
+        DriveStraightDistance(-20, false);
+        sleep(500);
+        DriveStraightDistance(6, false);
+        sleep(500);
+        Strafe(49);
+        sleep(500);
+        duck(5);
+        Strafe(-2);
+        sleep(500);
+        targetHeading = -90;
+        Turn(-1000);
+        sleep(500);
+        Strafe(-6);
+        sleep(500);
+        DriveStraightDistance(60, false);
+        sleep(500);
+        Strafe(-6);
+        DriveStraightDistance(30, false);
     }
-
-    private void DriveStraight(double power) {
-        robot.FrontRight.setPower(power);
-        robot.FrontLeft.setPower(power);
-        robot.RearRight.setPower(power);
-        robot.RearLeft.setPower(power);
+    private void DriveStraight(double rightPower, double leftPower) {
+        robot.FrontRight.setPower(rightPower);
+        robot.FrontLeft.setPower(leftPower);
+        robot.RearRight.setPower(rightPower);
+        robot.RearLeft.setPower(leftPower);
     }
 
     private void StopDriving() {
-        DriveStraight(0);
+        DriveStraight(0, 0);
     }
 
-    public void DriveStraightDistance(int distance, double power) {
+    private void DriveStraightDistance(int distance1, boolean fast) {
+        int distance = (int)(distance1*COUNTS_PER_INCH);
+        telemetry.update();
+
         robot.FrontRight.setTargetPosition(robot.FrontRight.getCurrentPosition() - distance);
         robot.FrontLeft.setTargetPosition(robot.FrontLeft.getCurrentPosition() + distance);
         robot.RearRight.setTargetPosition(robot.RearRight.getCurrentPosition() - distance);
         robot.RearLeft.setTargetPosition(robot.RearLeft.getCurrentPosition() + distance);
 
-        DriveStraight(power);
+        DriveStraight(drive_speed, drive_speed);
         while ((robot.FrontRight.isBusy() && robot.RearLeft.isBusy() && robot.RearRight.isBusy() && robot.FrontLeft.isBusy()) && opModeIsActive()) {
-            idle();
+            checkOrientation();
+            telemetry.addData("IMU: ", currentHeading);
+            telemetry.update();
+            p = Math.abs(k_p * (robot.FrontRight.getTargetPosition() - robot.FrontRight.getCurrentPosition()));
+            turn_error = turn_k_p*(targetHeading - currentHeading);
+            while(turn_error > 180){
+                turn_error -= 360;
+            }
+            while(turn_error < -180){
+                turn_error += 360;
+            }
+            output = Range.clip(p - turn_error, -drive_speed, drive_speed);
+            steer = Range.clip(p + turn_error, -drive_speed, drive_speed);
+            DriveStraight(output, steer);
+            /*if (distance == Math.abs(distance)) {
+                if (currentHeading > targetHeading + 1) {
+                    robot.FrontRight.setPower(power * 0.9);
+                    robot.FrontLeft.setPower(power * 1.1);
+                    robot.RearRight.setPower(power * 0.9);
+                    robot.RearLeft.setPower(power * 1.1);
+                } else if (currentHeading < targetHeading - 1) {
+                    robot.FrontRight.setPower(power * 1.1);
+                    robot.FrontLeft.setPower(power * 0.9);
+                    robot.RearRight.setPower(power * 1.1);
+                    robot.RearLeft.setPower(power * 0.9);
+                } else {
+                    robot.FrontRight.setPower(power);
+                    robot.FrontLeft.setPower(power);
+                    robot.RearRight.setPower(power);
+                    robot.RearLeft.setPower(power);
+                }
+            } else {
+                if (currentHeading > targetHeading + 1) {
+                    robot.FrontRight.setPower(power * 1.1);
+                    robot.FrontLeft.setPower(power * 0.9);
+                    robot.RearRight.setPower(power * 1.1);
+                    robot.RearLeft.setPower(power * 0.9);
+                } else if (currentHeading < targetHeading - 1) {
+                    robot.FrontRight.setPower(power * 0.9);
+                    robot.FrontLeft.setPower(power * 1.1);
+                    robot.RearRight.setPower(power * 0.9);
+                    robot.RearLeft.setPower(power * 1.1);
+                } else {
+                    robot.FrontRight.setPower(power);
+                    robot.FrontLeft.setPower(power);
+                    robot.RearRight.setPower(power);
+                    robot.RearLeft.setPower(power);
+                }
+            }*/
         }
-
         StopDriving();
+        if(!fast) {
+            sleep(10);
+        }
     }
 
-    private void Strafe(int distance, double power) {
+    private void Strafe(int distance1) {
+        int distance = (int)(distance1*COUNTS_PER_INCH);
         telemetry.update();
 
         robot.FrontRight.setTargetPosition(robot.FrontRight.getCurrentPosition() - distance);
@@ -140,23 +225,122 @@ public class AutoBase extends LinearOpMode {
         robot.RearRight.setTargetPosition(robot.RearRight.getCurrentPosition() + distance);
         robot.RearLeft.setTargetPosition(robot.RearLeft.getCurrentPosition() + distance);
 
-        DriveStraight(power);
+        DriveStraight(turn_speed, turn_speed);
         while ((robot.FrontRight.isBusy() && robot.RearLeft.isBusy() && robot.RearRight.isBusy() && robot.FrontLeft.isBusy()) && opModeIsActive()) {
             idle();
-        }
 
+            checkOrientation();
+            p = Math.abs(k_p * (robot.FrontRight.getTargetPosition() - robot.FrontRight.getCurrentPosition()));
+            turn_error = turn_k_p*(targetHeading - currentHeading);
+            while(turn_error > 180){
+                turn_error -= 360;
+            }
+            while(turn_error < -180){
+                turn_error += 360;
+            }
+            output = Range.clip(p - turn_error, -turn_speed, turn_speed);
+            steer = Range.clip(p + turn_error, -turn_speed, turn_speed);
+            DriveStraight(output, steer);
+            /*checkOrientation();
+            if (distance == Math.abs(distance)) {
+                if (currentHeading > targetHeading + 1) {
+                    robot.FrontRight.setPower(power * 0.9);
+                    robot.FrontLeft.setPower(power * 0.9);
+                    robot.RearRight.setPower(power * 1.1);
+                    robot.RearLeft.setPower(power * 1.1);
+                } else if (currentHeading < targetHeading - 1) {
+                    robot.FrontRight.setPower(power * 1.1);
+                    robot.FrontLeft.setPower(power * 1.1);
+                    robot.RearRight.setPower(power * 0.9);
+                    robot.RearLeft.setPower(power * 0.9);
+                } else {
+                    robot.FrontRight.setPower(power);
+                    robot.FrontLeft.setPower(power);
+                    robot.RearRight.setPower(power);
+                    robot.RearLeft.setPower(power);
+                }
+            } else {
+                if (currentHeading > targetHeading + 1) {
+                    robot.FrontRight.setPower(power * 1.1);
+                    robot.FrontLeft.setPower(power * 1.1);
+                    robot.RearRight.setPower(power * 0.9);
+                    robot.RearLeft.setPower(power * 0.9);
+                } else if (currentHeading < targetHeading - 1) {
+                    robot.FrontRight.setPower(power * 0.9);
+                    robot.FrontLeft.setPower(power * 0.9);
+                    robot.RearRight.setPower(power * 1.1);
+                    robot.RearLeft.setPower(power * 1.1);
+                } else {
+                    robot.FrontRight.setPower(power);
+                    robot.FrontLeft.setPower(power);
+                    robot.RearRight.setPower(power);
+                    robot.RearLeft.setPower(power);
+                }
+            }*/
+        }
         StopDriving();
+        sleep(10);
     }
 
-    private void Turn(int distance, double power) {
+    private void Turn(int distance) {
         robot.FrontRight.setTargetPosition(robot.FrontRight.getCurrentPosition() + distance);
         robot.FrontLeft.setTargetPosition(robot.FrontLeft.getCurrentPosition() + distance);
         robot.RearRight.setTargetPosition(robot.RearRight.getCurrentPosition() + distance);
         robot.RearLeft.setTargetPosition(robot.RearLeft.getCurrentPosition() + distance);
 
-        DriveStraight(power);
+        DriveStraight(turn_speed, turn_speed);
         while ((robot.FrontRight.isBusy() && robot.RearLeft.isBusy() && robot.RearRight.isBusy() && robot.FrontLeft.isBusy()) && opModeIsActive()) {
             idle();
+            //p = robot.FrontRight.getTargetPosition() - robot.FrontRight.getCurrentPosition();
+            //output = Range.clip(k_p*p, -1, 1);
+            checkOrientation();
+            telemetry.addData("IMU: ", currentHeading);
+            telemetry.update();
+            turn_error = targetHeading - currentHeading;
+            while(turn_error > 180){
+                turn_error -= 360;
+            }
+            while(turn_error < -180){
+                turn_error += 360;
+            }
+            steer = Range.clip(turn_k_p*turn_error, -turn_speed, turn_speed);
+            DriveStraight(-steer, steer);
+            /*checkOrientation();
+            if (distance == Math.abs(distance)) {
+                if (currentHeading > targetHeading + 1) {
+                    robot.FrontRight.setPower(power * 0.9);
+                    robot.FrontLeft.setPower(power * 1.1);
+                    robot.RearRight.setPower(power * 0.9);
+                    robot.RearLeft.setPower(power * 1.1);
+                } else if (currentHeading < targetHeading - 1) {
+                    robot.FrontRight.setPower(power * 1.1);
+                    robot.FrontLeft.setPower(power * 0.9);
+                    robot.RearRight.setPower(power * 1.1);
+                    robot.RearLeft.setPower(power * 0.9);
+                } else {
+                    robot.FrontRight.setPower(power);
+                    robot.FrontLeft.setPower(power);
+                    robot.RearRight.setPower(power);
+                    robot.RearLeft.setPower(power);
+                }
+            } else {
+                if (currentHeading > targetHeading + 1) {
+                    robot.FrontRight.setPower(power * 1.1);
+                    robot.FrontLeft.setPower(power * 0.9);
+                    robot.RearRight.setPower(power * 1.1);
+                    robot.RearLeft.setPower(power * 0.9);
+                } else if (currentHeading < targetHeading - 1) {
+                    robot.FrontRight.setPower(power * 0.9);
+                    robot.FrontLeft.setPower(power * 1.1);
+                    robot.RearRight.setPower(power * 0.9);
+                    robot.RearLeft.setPower(power * 1.1);
+                } else {
+                    robot.FrontRight.setPower(power);
+                    robot.FrontLeft.setPower(power);
+                    robot.RearRight.setPower(power);
+                    robot.RearLeft.setPower(power);
+                }
+            }*/
         }
         /*if(half) {
             checkOrientation();
@@ -167,24 +351,62 @@ public class AutoBase extends LinearOpMode {
         sleep(10);
     }
 
-    /*public void checkOrientation() {
+    private void orient(double seconds){
+        robot.FrontRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        robot.FrontLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        robot.RearRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        robot.RearLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        for(int k = 0; k <= 100*seconds; k++){
+            checkOrientation();
+            turn_error = targetHeading - currentHeading;
+            while(turn_error > 180){
+                turn_error -= 360;
+            }
+            while(turn_error < -180){
+                turn_error += 360;
+            }
+            steer = Range.clip(turn_k_p*turn_error, -1, 1);
+            DriveStraight(steer, steer);
+            sleep(10);
+        }
+        robot.FrontRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.FrontLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.RearRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.RearLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        robot.FrontRight.setTargetPosition(0);
+        robot.FrontLeft.setTargetPosition(0);
+        robot.RearRight.setTargetPosition(0);
+        robot.RearLeft.setTargetPosition(0);
+
+        robot.FrontRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        robot.FrontLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        robot.RearRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        robot.RearLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+    }
+
+    private void checkOrientation() {
         // read the orientation of the robot
         angles = robot.imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
         robot.imu.getPosition();
         // and save the heading
-        currentHeading = angles.firstAngle;
-    }*/
+        currentHeading = angles.firstAngle - offset;
+    }
 
     public int Scan() {
-        if(robot.distRight.getDistance(DistanceUnit.INCH) < 20) {
-            return 1;
+        int scanDistance = 0;
+        for(int i = 0; i < 100; i++) {
+            if (robot.distRight.getDistance(DistanceUnit.INCH) < 13) {
+                scanDistance += 1;
+            } else if (robot.distRight.getDistance(DistanceUnit.INCH) > 23) {
+                scanDistance += 3;
+            } else {
+                scanDistance += 2;
+            }
+            telemetry.addData("scanDistance: ", scanDistance);
+            telemetry.update();
         }
-        else if(robot.distRight.getDistance(DistanceUnit.INCH) > 30) {
-            return 3;
-        }
-        else {
-            return 2;
-        }
+        return Math.round(scanDistance/100);
     }
 
     public void linearSlidePos(int position) {
@@ -204,7 +426,7 @@ public class AutoBase extends LinearOpMode {
     }
 
     public void duck (int seconds) {
-        robot.duck.setPower(1);
+        robot.duck.setPower(-1);
         sleep(seconds*1000);
         robot.duck.setPower(0);
     }
