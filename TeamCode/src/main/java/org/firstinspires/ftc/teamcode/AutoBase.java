@@ -95,7 +95,7 @@ public class AutoBase extends LinearOpMode {
         checkOrientation();
         offset = currentHeading;
 
-        DriveStraightDistance(17, false);
+        DriveStraightDistance(18, false);
         sleep(100);
         orient(0.5);
         int i = Scan();
@@ -114,29 +114,32 @@ public class AutoBase extends LinearOpMode {
                 DriveStraightDistance(2, false);
                 break;
         }
-        sleep(500);
+        sleep(100);
         dumpPos(-400);
         sleep(1000);
         dumpPos(0);
         linearSlidePos(0);
-        DriveStraightDistance(-20, false);
-        sleep(500);
-        DriveStraightDistance(6, false);
-        sleep(500);
-        Strafe(49);
-        sleep(500);
+        DriveStraightDistance(-24, false);
+        sleep(100);
+        DriveStraightDistance(8, false);
+        orient(0.5);
+        Strafe(54);
+        sleep(100);
         duck(5);
         Strafe(-2);
-        sleep(500);
+        sleep(100);
         targetHeading = -90;
         Turn(-1000);
-        sleep(500);
+        sleep(100);
         Strafe(-6);
-        sleep(500);
+        sleep(100);
         DriveStraightDistance(60, false);
-        sleep(500);
+        sleep(100);
         Strafe(-6);
-        DriveStraightDistance(30, false);
+        dumpPos(300);
+        DriveStraightDistance(40, false);
+        targetHeading = 90;
+        Turn(-2000);
     }
     private void DriveStraight(double rightPower, double leftPower) {
         robot.FrontRight.setPower(rightPower);
@@ -395,7 +398,7 @@ public class AutoBase extends LinearOpMode {
 
     public int Scan() {
         int scanDistance = 0;
-        for(int i = 0; i < 100; i++) {
+        for(int i = 0; i < 50; i++) {
             if (robot.distRight.getDistance(DistanceUnit.INCH) < 13) {
                 scanDistance += 1;
             } else if (robot.distRight.getDistance(DistanceUnit.INCH) > 23) {
@@ -406,7 +409,7 @@ public class AutoBase extends LinearOpMode {
             telemetry.addData("scanDistance: ", scanDistance);
             telemetry.update();
         }
-        return Math.round(scanDistance/100);
+        return Math.round(scanDistance/50);
     }
 
     public void linearSlidePos(int position) {
