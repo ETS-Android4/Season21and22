@@ -19,7 +19,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import org.firstinspires.ftc.robotcore.external.navigation.Position;
 import org.firstinspires.ftc.robotcore.external.navigation.Velocity;
 
-@Autonomous(name = "AutoBase", group = "Final")
+@Autonomous(name = "AutoBase", group = "Final", preselectTeleOp = "TeleOpBase")
 public class AutoBase extends LinearOpMode {
     HWMap robot = new HWMap();
     Orientation angles;
@@ -125,6 +125,7 @@ public class AutoBase extends LinearOpMode {
         orient(0.5);
         Strafe(54);
         sleep(100);
+        DriveStraightDistance(-1, true);
         duck(5);
         Strafe(-2);
         sleep(100);
@@ -135,9 +136,9 @@ public class AutoBase extends LinearOpMode {
         sleep(100);
         DriveStraightDistance(60, false);
         sleep(100);
-        Strafe(-6);
-        dumpPos(300);
+        Strafe(-10);
         DriveStraightDistance(40, false);
+        dumpPos(250);
         targetHeading = 90;
         Turn(-2000);
     }
@@ -398,10 +399,12 @@ public class AutoBase extends LinearOpMode {
 
     public int Scan() {
         int scanDistance = 0;
+        double currentDistance = 0;
         for(int i = 0; i < 50; i++) {
-            if (robot.distRight.getDistance(DistanceUnit.INCH) < 13) {
+            currentDistance = robot.distRight.getDistance(DistanceUnit.INCH);
+            if (currentDistance < 14) {
                 scanDistance += 1;
-            } else if (robot.distRight.getDistance(DistanceUnit.INCH) > 23) {
+            } else if (currentDistance > 22) {
                 scanDistance += 3;
             } else {
                 scanDistance += 2;
