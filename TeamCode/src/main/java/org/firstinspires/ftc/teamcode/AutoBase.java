@@ -95,7 +95,7 @@ public class AutoBase extends LinearOpMode {
         checkOrientation();
         offset = currentHeading;
 
-        DriveStraightDistance(18, false);
+        DriveStraightDistance(17, false);
         sleep(100);
         orient(0.5);
         int i = Scan();
@@ -125,7 +125,6 @@ public class AutoBase extends LinearOpMode {
         orient(0.5);
         Strafe(54);
         sleep(100);
-        DriveStraightDistance(-1, true);
         duck(5);
         Strafe(-2);
         sleep(100);
@@ -138,7 +137,7 @@ public class AutoBase extends LinearOpMode {
         sleep(100);
         Strafe(-10);
         DriveStraightDistance(40, false);
-        dumpPos(250);
+        dumpPos(200);
         targetHeading = 90;
         Turn(-2000);
     }
