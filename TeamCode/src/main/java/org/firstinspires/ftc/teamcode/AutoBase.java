@@ -123,7 +123,8 @@ public class AutoBase extends LinearOpMode {
         sleep(100);
         DriveStraightDistance(8, false);
         orient(0.5);
-        Strafe(54);
+        Strafe(50);
+        StrafeSlow(3);
         sleep(100);
         duck(5);
         Strafe(-2);
@@ -135,7 +136,7 @@ public class AutoBase extends LinearOpMode {
         sleep(100);
         DriveStraightDistance(60, false);
         sleep(100);
-        Strafe(-10);
+        Strafe(-20);
         DriveStraightDistance(40, false);
         dumpPos(200);
         targetHeading = 90;
@@ -229,6 +230,72 @@ public class AutoBase extends LinearOpMode {
         robot.RearLeft.setTargetPosition(robot.RearLeft.getCurrentPosition() + distance);
 
         DriveStraight(turn_speed, turn_speed);
+        while ((robot.FrontRight.isBusy() && robot.RearLeft.isBusy() && robot.RearRight.isBusy() && robot.FrontLeft.isBusy()) && opModeIsActive()) {
+            idle();
+
+            checkOrientation();
+            p = Math.abs(k_p * (robot.FrontRight.getTargetPosition() - robot.FrontRight.getCurrentPosition()));
+            turn_error = turn_k_p*(targetHeading - currentHeading);
+            while(turn_error > 180){
+                turn_error -= 360;
+            }
+            while(turn_error < -180){
+                turn_error += 360;
+            }
+            output = Range.clip(p - turn_error, -turn_speed, turn_speed);
+            steer = Range.clip(p + turn_error, -turn_speed, turn_speed);
+            DriveStraight(output, steer);
+            /*checkOrientation();
+            if (distance == Math.abs(distance)) {
+                if (currentHeading > targetHeading + 1) {
+                    robot.FrontRight.setPower(power * 0.9);
+                    robot.FrontLeft.setPower(power * 0.9);
+                    robot.RearRight.setPower(power * 1.1);
+                    robot.RearLeft.setPower(power * 1.1);
+                } else if (currentHeading < targetHeading - 1) {
+                    robot.FrontRight.setPower(power * 1.1);
+                    robot.FrontLeft.setPower(power * 1.1);
+                    robot.RearRight.setPower(power * 0.9);
+                    robot.RearLeft.setPower(power * 0.9);
+                } else {
+                    robot.FrontRight.setPower(power);
+                    robot.FrontLeft.setPower(power);
+                    robot.RearRight.setPower(power);
+                    robot.RearLeft.setPower(power);
+                }
+            } else {
+                if (currentHeading > targetHeading + 1) {
+                    robot.FrontRight.setPower(power * 1.1);
+                    robot.FrontLeft.setPower(power * 1.1);
+                    robot.RearRight.setPower(power * 0.9);
+                    robot.RearLeft.setPower(power * 0.9);
+                } else if (currentHeading < targetHeading - 1) {
+                    robot.FrontRight.setPower(power * 0.9);
+                    robot.FrontLeft.setPower(power * 0.9);
+                    robot.RearRight.setPower(power * 1.1);
+                    robot.RearLeft.setPower(power * 1.1);
+                } else {
+                    robot.FrontRight.setPower(power);
+                    robot.FrontLeft.setPower(power);
+                    robot.RearRight.setPower(power);
+                    robot.RearLeft.setPower(power);
+                }
+            }*/
+        }
+        StopDriving();
+        sleep(10);
+    }
+
+    private void StrafeSlow(int distance1) {
+        int distance = (int)(distance1*COUNTS_PER_INCH);
+        telemetry.update();
+
+        robot.FrontRight.setTargetPosition(robot.FrontRight.getCurrentPosition() - distance);
+        robot.FrontLeft.setTargetPosition(robot.FrontLeft.getCurrentPosition() - distance);
+        robot.RearRight.setTargetPosition(robot.RearRight.getCurrentPosition() + distance);
+        robot.RearLeft.setTargetPosition(robot.RearLeft.getCurrentPosition() + distance);
+
+        DriveStraight(turn_speed/2, turn_speed/2);
         while ((robot.FrontRight.isBusy() && robot.RearLeft.isBusy() && robot.RearRight.isBusy() && robot.FrontLeft.isBusy()) && opModeIsActive()) {
             idle();
 
@@ -401,9 +468,9 @@ public class AutoBase extends LinearOpMode {
         double currentDistance = 0;
         for(int i = 0; i < 50; i++) {
             currentDistance = robot.distRight.getDistance(DistanceUnit.INCH);
-            if (currentDistance < 14) {
+            if (currentDistance < 11) {
                 scanDistance += 1;
-            } else if (currentDistance > 22) {
+            } else if (currentDistance > 18) {
                 scanDistance += 3;
             } else {
                 scanDistance += 2;

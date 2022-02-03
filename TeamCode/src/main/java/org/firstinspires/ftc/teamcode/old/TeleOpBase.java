@@ -15,6 +15,7 @@ public class TeleOpBase extends OpMode {
     //robotctions robot = new robotctions();
     boolean startCheck = true;
     boolean speedModulo = true;
+    boolean brake = true;
 
     //boolean frontLCheck = true;
     //boolean frontCheck = true;
@@ -62,10 +63,10 @@ public class TeleOpBase extends OpMode {
         robot.RearRight.setVelocity(speedMod*2600 * (-gamepad1.right_stick_y + gamepad1.right_stick_x));
         robot.RearLeft.setVelocity(speedMod*2600 * (gamepad1.left_stick_y + gamepad1.left_stick_x));*/
         if(gamepad2.x){
-            robot.LinearSlide.setPower(0.5);
+            robot.LinearSlide.setPower(0.6);
         }
         else if(gamepad2.b) {
-            robot.LinearSlide.setPower(-0.5);
+            robot.LinearSlide.setPower(-0.6);
         }
         else {
             robot.LinearSlide.setPower(0);
@@ -157,16 +158,26 @@ public class TeleOpBase extends OpMode {
             frontLCheck = true;
         }*/
 
-        /*if (gamepad1.start && startCheck) {
-            robot.FrontRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-            robot.FrontLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-            robot.RearRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-            robot.RearLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        if (gamepad1.start && startCheck) {
+            if(!brake) {
+                robot.FrontRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+                robot.FrontLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+                robot.RearRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+                robot.RearLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+                brake = true;
+            }
+            else {
+                robot.FrontRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+                robot.FrontLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+                robot.RearRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+                robot.RearLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+                brake = false;
+            }
             startCheck = false;
         }
         else if (!gamepad1.start) {
             startCheck = true;
-        }*/
+        }
     }
 
     public void linearSlidePos(int position) {
