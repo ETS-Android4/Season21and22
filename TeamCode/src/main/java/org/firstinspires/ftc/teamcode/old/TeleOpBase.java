@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.old;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 // import org.firstinspires.ftc.teamcode.robotctions;
 import org.firstinspires.ftc.teamcode.HWMap;
@@ -48,7 +49,7 @@ public class TeleOpBase extends OpMode {
 
     @Override
     public void loop() {
-        frontright = 3000 * (-gamepad1.right_stick_y - gamepad1.right_stick_x);
+        /*frontright = 3000 * (-gamepad1.right_stick_y - gamepad1.right_stick_x);
         frontleft = 3000 * (gamepad1.left_stick_y - gamepad1.left_stick_x);
         rearright = 3000 * (-gamepad1.right_stick_y + gamepad1.right_stick_x);
         rearleft = 3000 * (gamepad1.left_stick_y + gamepad1.left_stick_x);
@@ -56,12 +57,12 @@ public class TeleOpBase extends OpMode {
         robot.FrontRight.setVelocity(speedMod*(frontright*frontright*Math.signum(frontright))/3000);
         robot.FrontLeft.setVelocity(speedMod*(frontleft*frontleft*Math.signum(frontleft))/3000);
         robot.RearRight.setVelocity(speedMod*(rearright*rearright*Math.signum(rearright))/3000);
-        robot.RearLeft.setVelocity(speedMod*(rearleft*rearleft*Math.signum(rearleft))/3000);
+        robot.RearLeft.setVelocity(speedMod*(rearleft*rearleft*Math.signum(rearleft))/3000);*/
 
-        /*robot.FrontRight.setVelocity(speedMod*2600 * (-gamepad1.right_stick_y - gamepad1.right_stick_x));
+        robot.FrontRight.setVelocity(speedMod*2600 * (-gamepad1.right_stick_y - gamepad1.right_stick_x));
         robot.FrontLeft.setVelocity(speedMod*2600 * (gamepad1.left_stick_y - gamepad1.left_stick_x));
         robot.RearRight.setVelocity(speedMod*2600 * (-gamepad1.right_stick_y + gamepad1.right_stick_x));
-        robot.RearLeft.setVelocity(speedMod*2600 * (gamepad1.left_stick_y + gamepad1.left_stick_x));*/
+        robot.RearLeft.setVelocity(speedMod*2600 * (gamepad1.left_stick_y + gamepad1.left_stick_x));
         if(gamepad2.x){
             robot.LinearSlide.setPower(0.6);
         }
@@ -106,11 +107,11 @@ public class TeleOpBase extends OpMode {
         }
 
         if(gamepad2.right_trigger > 0) {
-            robot.FrontCollector.setPower(gamepad2.right_trigger);
+            robot.FrontCollector.setPower(-gamepad2.right_trigger);
             robot.MidCollector.setPower(-gamepad2.right_trigger);
         }
         else {
-            robot.FrontCollector.setPower(-gamepad2.left_trigger);
+            robot.FrontCollector.setPower(gamepad2.left_trigger);
             robot.MidCollector.setPower(gamepad2.left_trigger);
         }
         /*

@@ -26,6 +26,7 @@ public class AutoBase extends LinearOpMode {
     private double targetHeading = 0;
     private double currentHeading = 0;
     private double turn_error = 0;
+    int distance = -24;
     double offset = 0;
     double p = 0;
     double k_p = 0.002;
@@ -104,6 +105,7 @@ public class AutoBase extends LinearOpMode {
                 linearSlidePos(0);
                 sleep(100);
                 DriveStraightDistance(-2, false);
+                distance += 2;
                 break;
             case 2:
                 linearSlidePos(-500);
@@ -112,6 +114,7 @@ public class AutoBase extends LinearOpMode {
                 linearSlidePos(-1000);
                 sleep(100);
                 DriveStraightDistance(2, false);
+                distance -= 2;
                 break;
         }
         sleep(100);
@@ -119,7 +122,7 @@ public class AutoBase extends LinearOpMode {
         sleep(1000);
         dumpPos(0);
         linearSlidePos(0);
-        DriveStraightDistance(-24, false);
+        DriveStraightDistance(distance, false);
         sleep(100);
         DriveStraightDistance(8, false);
         orient(0.5);
@@ -139,8 +142,13 @@ public class AutoBase extends LinearOpMode {
         Strafe(-20);
         DriveStraightDistance(40, false);
         dumpPos(200);
+        robot.FrontCollector.setPower(1);
+        robot.MidCollector.setPower(1);
         targetHeading = 90;
         Turn(-2000);
+        DriveStraightDistance(-2, false);
+        robot.FrontCollector.setPower(0);
+        robot.MidCollector.setPower(0);
     }
     private void DriveStraight(double rightPower, double leftPower) {
         robot.FrontRight.setPower(rightPower);
